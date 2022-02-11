@@ -1,0 +1,25 @@
+{
+  "description": "Activate a deployment of an application",
+  "input_method": "stdin",
+  "files": [
+    "application/tasks/utils/application_factory.rb",
+    "application/tasks/utils/application.rb",
+    "application/tasks/utils/artifact.rb",
+    "application/tasks/utils/deployment.rb",
+    "ruby_task_helper/files/task_helper.rb"
+  ],
+  "parameters": {
+    "application": {
+      "description": "The application to operate on",
+      "type": "String[1]"
+    },
+    "environment": {
+      "description": "The environment to operate on",
+      "type": "String[1]"
+    },
+    "deployment_name": {
+      "description": "The name of the deployment to activate",
+      "type": "String[1]"
+    }
+  }
+}

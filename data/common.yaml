@@ -1,0 +1,5 @@
+---
+application::common::configuration_root: /etc/applications
+application::common::configuration_user: root
+application::common::configuration_group: root
+application::common::mtree_provider: puppet_gem

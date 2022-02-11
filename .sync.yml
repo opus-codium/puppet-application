@@ -1,0 +1,6 @@
+Gemfile:
+  puppet_version: '~> 7.0'
+  optional:
+    ':test':
+      - gem: cucumber
+      - gem: mtree
