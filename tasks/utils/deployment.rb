@@ -32,18 +32,19 @@ class Deployment
   def deploy(url)
     create_deployment_directory
     begin
-      run_hook('before_deploy')
+      raise 'Aborted deployment: before_deploy hook failed' unless run_hook('before_deploy')
+
       artifact = Artifact.new(url)
       artifact.extract_to(full_path)
       artifact.unlink
 
       application.setup_persistent_data(self)
       application.link_persistent_data(self)
-      run_hook('after_deploy')
     rescue => e
       remove
       raise e
     end
+    run_hook('after_deploy')
   end
 
   def active?
@@ -52,8 +53,8 @@ class Deployment
 
   def activate
     raise "#{full_path} is not a valid deployment path" unless File.directory?(full_path)
+    raise 'Aborted activation: before_activate hook failed' unless run_hook('before_activate')
 
-    run_hook('before_activate')
     # We need to remove the existing symlink otherwise the link is
     # created in the directory pointed to by the existing symlink, so
     # instead of:
@@ -108,12 +109,20 @@ class Deployment
   def run_hook(name)
     hook = hook_path(name)
 
-    return unless hook
+    return true unless hook
 
-    FileUtils.chdir(full_path) do
-      # TODO: Run the hook as the deploy user
-      system(hook)
+    pid = Process.fork do
+      Process.gid = application.deploy_group if application.deploy_group
+      Process.uid = application.deploy_user  if application.deploy_user
+
+      FileUtils.chdir(full_path) do
+        exec(hook)
+      end
     end
+
+    Process.wait(pid)
+
+    $CHILD_STATUS.success?
   end
 
   def hook_path(hook_name)
