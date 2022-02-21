@@ -22,11 +22,25 @@ class Deployment
     @name = name
   end
 
-  def download_and_extract(url)
+  def self.create(application, name, url)
+    deployment = Deployment.new(application, name)
+    deployment.deploy(url)
+    deployment
+  end
+
+  def deploy(url)
     create_deployment_directory
-    artifact = Artifact.new(url)
-    artifact.extract_to(full_path)
-    artifact.unlink
+    begin
+      artifact = Artifact.new(url)
+      artifact.extract_to(full_path)
+      artifact.unlink
+
+      application.setup_persistent_data(self)
+      application.link_persistent_data(self)
+    rescue => e
+      remove
+      raise e
+    end
   end
 
   def active?

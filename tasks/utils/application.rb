@@ -19,10 +19,8 @@ class Application
   end
 
   def deploy(url, deployment_name)
-    deployment = Deployment.new(self, deployment_name)
-    deployment.download_and_extract(url)
-    setup_persistent_data(deployment)
-    link_persistent_data(deployment)
+    deployment = Deployment.create(self, deployment_name, url)
+
     deployment.activate
     prune_old_deployments
   end
