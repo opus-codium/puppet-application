@@ -6,7 +6,16 @@ require 'mtree'
 require_relative 'artifact'
 
 class Deployment
+  include Comparable
+
   attr_reader :application, :name
+
+  def <=>(other)
+    res = application <=> other.application
+    return res if res != 0
+
+    name <=> other.name
+  end
 
   def initialize(application, name)
     @application = application
@@ -18,6 +27,10 @@ class Deployment
     artifact = Artifact.new(url)
     artifact.extract_to(full_path)
     artifact.unlink
+  end
+
+  def active?
+    application.current_deployment == self
   end
 
   def activate
@@ -62,6 +75,8 @@ class Deployment
   end
 
   def remove
+    raise 'Cannot remove the active deployment' if active?
+
     FileUtils.rm_rf(full_path)
   end
 

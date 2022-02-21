@@ -22,6 +22,18 @@ When('I activate the deployment {string}') do |name|
   workaround_async_ci
 end
 
+When('I remove the deployment {string}') do |name|
+  @application.deployments[name].remove
+end
+
+When('I remove the deployment {string} catching errors') do |name|
+  begin
+    step(%(I remove the deployment "#{name}"))
+  rescue StandardError => e
+    @last_error = e.message
+  end
+end
+
 Then('the current deployment should be {string}') do |target|
   step(%(the symbolic link "current" should point to "#{target}"))
 end
@@ -41,4 +53,8 @@ end
 
 Then('the deployments should be:') do |table|
   expect(@application.deployments.keys).to eq(table.hashes.map { |row| row[:name] })
+end
+
+Then('the error {string} should have been catch') do |message|
+  expect(@last_error).to eq(message)
 end

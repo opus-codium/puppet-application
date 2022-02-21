@@ -8,6 +8,25 @@ Feature: Deployments
     Then the deployment "v2-works" should exist
     Then the symbolic link "current" should point to "v2-works"
 
+  Scenario: Remove an old deployment
+    Given an application "app1"
+    And the following deployments:
+      | name |
+      | v1   |
+      | v2   |
+      | v3   |
+    When I remove the deployment "v2"
+    Then the deployments should be:
+      | name |
+      | v1   |
+      | v3   |
+    When I remove the deployment "v3" catching errors
+    Then the error "Cannot remove the active deployment" should have been catch
+    And the deployments should be:
+      | name |
+      | v1   |
+      | v3   |
+
   Scenario: Prune old deployments
     Up to 5 deployments are kept on disk.  When this limit is reached, least recently used deployments are pruned.
     Given an application "app1"

@@ -40,4 +40,42 @@ RSpec.describe Deployment do
 
     it { is_expected.to eq(ctime) }
   end
+
+  describe '#<=>' do
+    subject { deployment == other }
+
+    let(:other) { described_class.new(other_application, other_deployment_name) }
+
+    context 'with the same application' do
+      let(:other_application) { application }
+
+      context 'with the same deployment name' do
+        let(:other_deployment_name) { deployment_name }
+
+        it { is_expected.to be_truthy }
+      end
+
+      context 'with another deployment name' do
+        let(:other_deployment_name) { 'unrelated' }
+
+        it { is_expected.to be_falsey }
+      end
+    end
+
+    context 'with another application' do
+      let(:other_application) { Application.new(name: 'another-instance-with-the-same-path', path: path) }
+
+      context 'with the same deployment name' do
+        let(:other_deployment_name) { deployment_name }
+
+        it { is_expected.to be_falsey }
+      end
+
+      context 'with another deployment name' do
+        let(:other_deployment_name) { 'unrelated' }
+
+        it { is_expected.to be_falsey }
+      end
+    end
+  end
 end
