@@ -4,36 +4,33 @@ require 'open3'
 require 'yaml'
 
 require_relative 'application'
+require_relative 'applications_helper'
 
 class ApplicationFactory
   def self.find(application, environment)
-    config_entries_for(application, environment).map do |spec|
-      spec.keys.each do |k|
-        spec[k.to_sym] = spec.delete(k)
-      end
-      spec[:name] = spec.delete(:application)
+    configuration_metadata_for(application, environment).map do |spec|
       Application.new(spec)
     end
   end
 
-  def self.config_entries_for(application, environment)
-    load_config.filter do |spec|
+  def self.configuration_metadata_for(application, environment)
+    res = load_configuration_metadata.filter do |spec|
       spec['application'] == application &&
         spec['environment'] == environment
     end
+
+    res.map do |spec|
+      spec.keys.each do |k|
+        spec[k.to_sym] = spec.delete(k)
+      end
+      spec[:name] = spec.delete(:application)
+      spec
+    end
   end
 
-  def self.load_config
-    stdout, _stderr, _status = Open3.capture3('facter', 'osfamily')
-
-    configuration_filename = case stdout.strip
-                             when 'FreeBSD' then '/usr/local/etc/applications/metadata.yaml'
-                             else
-                               '/etc/applications/metadata.yaml'
-                             end
-
-    YAML.safe_load(File.read(configuration_filename))
+  def self.load_configuration_metadata
+    YAML.safe_load(File.read(ApplicationsHelper.instance.configuration_metadata))
   end
 
-  private_class_method :config_entries_for, :load_config
+  private_class_method :configuration_metadata_for, :load_configuration_metadata
 end

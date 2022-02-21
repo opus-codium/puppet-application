@@ -3,6 +3,7 @@
 require 'fileutils'
 require 'mtree'
 
+require_relative 'applications_helper'
 require_relative 'artifact'
 
 class Deployment
@@ -22,11 +23,28 @@ class Deployment
     @name = name
   end
 
-  def download_and_extract(url)
+  def self.create(application, name, url)
+    deployment = Deployment.new(application, name)
+    deployment.deploy(url)
+    deployment
+  end
+
+  def deploy(url)
     create_deployment_directory
-    artifact = Artifact.new(url)
-    artifact.extract_to(full_path)
-    artifact.unlink
+    begin
+      raise 'Aborted deployment: before_deploy hook failed' unless run_hook('before_deploy')
+
+      artifact = Artifact.new(url)
+      artifact.extract_to(full_path)
+      artifact.unlink
+
+      application.setup_persistent_data(self)
+      application.link_persistent_data(self)
+    rescue => e
+      remove
+      raise e
+    end
+    run_hook('after_deploy')
   end
 
   def active?
@@ -35,6 +53,7 @@ class Deployment
 
   def activate
     raise "#{full_path} is not a valid deployment path" unless File.directory?(full_path)
+    raise 'Aborted activation: before_activate hook failed' unless run_hook('before_activate')
 
     # We need to remove the existing symlink otherwise the link is
     # created in the directory pointed to by the existing symlink, so
@@ -56,6 +75,7 @@ class Deployment
     FileUtils.rm_f(application.current_link_path)
     FileUtils.ln_s(full_path, application.current_link_path)
     FileUtils.touch(full_path)
+    run_hook('after_activate')
   end
 
   def created_at
@@ -86,12 +106,38 @@ class Deployment
     File.join(application.path, name)
   end
 
+  def run_hook(name)
+    hook = hook_path(name)
+
+    return true unless hook
+
+    pid = Process.fork do
+      Process.gid = application.deploy_group if application.deploy_group
+      Process.uid = application.deploy_user  if application.deploy_user
+
+      FileUtils.chdir(full_path) do
+        exec(hook)
+      end
+    end
+
+    Process.wait(pid)
+
+    $CHILD_STATUS.success?
+  end
+
+  def hook_path(hook_name)
+    return nil unless application.kind
+
+    path = File.join(ApplicationsHelper.instance.configuration_root, application.kind, hook_name)
+
+    path if File.executable?(path)
+  end
+
   def create_deployment_directory
     raise "File exist: #{full_path}" if File.directory?(full_path)
 
     FileUtils.mkdir_p(full_path)
-    # TODO: Change owner when a value was provided
-    # FileUtils.chown('deploy', 'deploy', full_path)
+    FileUtils.chown(application.deploy_user, application.deploy_group, full_path)
   end
 
   def persistent_data_specifications_load

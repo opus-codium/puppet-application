@@ -6,7 +6,7 @@ class Application
   CURRENT         = 'current'
   PERSISTENT_DATA = 'persistent-data'
 
-  attr_reader :name, :path, :deploy_user, :deploy_group
+  attr_reader :name, :path, :deploy_user, :deploy_group, :kind
 
   def initialize(name:, path:, environment: nil, deploy_user: nil, deploy_group: nil, kind: nil, user_mapping: {})
     @name         = name
@@ -19,10 +19,8 @@ class Application
   end
 
   def deploy(url, deployment_name)
-    deployment = Deployment.new(self, deployment_name)
-    deployment.download_and_extract(url)
-    setup_persistent_data(deployment)
-    link_persistent_data(deployment)
+    deployment = Deployment.create(self, deployment_name, url)
+
     deployment.activate
     prune_old_deployments
   end
