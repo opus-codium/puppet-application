@@ -13,9 +13,16 @@ class Artifact
   end
 
   def download(url)
-    Puppet::Util::Execution.execute %(curl --cert "#{hostcert}" --key "#{hostprivkey}" --output #{@tmp_file.path} --fail #{url}),
-                                    failonfail: true,
-                                    combine: true
+    client = Puppet.runtime[:http]
+    client.get(URI(url), options: { include_system_store: true }) do |response|
+      if response.success?
+        File.open(@tmp_file.path, 'w') do |f|
+          response.read_body do |data|
+            f.write(data)
+          end
+        end
+      end
+    end
   end
 
   def extract_to(path)
