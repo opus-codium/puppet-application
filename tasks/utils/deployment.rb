@@ -3,6 +3,7 @@
 require 'fileutils'
 require 'mtree'
 
+require_relative 'applications_helper'
 require_relative 'artifact'
 
 class Deployment
@@ -31,12 +32,14 @@ class Deployment
   def deploy(url)
     create_deployment_directory
     begin
+      run_hook('before_deploy')
       artifact = Artifact.new(url)
       artifact.extract_to(full_path)
       artifact.unlink
 
       application.setup_persistent_data(self)
       application.link_persistent_data(self)
+      run_hook('after_deploy')
     rescue => e
       remove
       raise e
@@ -50,6 +53,7 @@ class Deployment
   def activate
     raise "#{full_path} is not a valid deployment path" unless File.directory?(full_path)
 
+    run_hook('before_activate')
     # We need to remove the existing symlink otherwise the link is
     # created in the directory pointed to by the existing symlink, so
     # instead of:
@@ -70,6 +74,7 @@ class Deployment
     FileUtils.rm_f(application.current_link_path)
     FileUtils.ln_s(full_path, application.current_link_path)
     FileUtils.touch(full_path)
+    run_hook('after_activate')
   end
 
   def created_at
@@ -98,6 +103,25 @@ class Deployment
 
   def full_path
     File.join(application.path, name)
+  end
+
+  def run_hook(name)
+    hook = hook_path(name)
+
+    return unless hook
+
+    FileUtils.chdir(full_path) do
+      # TODO: Run the hook as the deploy user
+      system(hook)
+    end
+  end
+
+  def hook_path(hook_name)
+    return nil unless application.kind
+
+    path = File.join(ApplicationsHelper.instance.configuration_root, application.kind, hook_name)
+
+    path if File.executable?(path)
   end
 
   def create_deployment_directory
