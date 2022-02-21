@@ -90,8 +90,7 @@ class Deployment
     raise "File exist: #{full_path}" if File.directory?(full_path)
 
     FileUtils.mkdir_p(full_path)
-    # TODO: Change owner when a value was provided
-    # FileUtils.chown('deploy', 'deploy', full_path)
+    FileUtils.chown(application.deploy_user, application.deploy_group, full_path)
   end
 
   def persistent_data_specifications_load
