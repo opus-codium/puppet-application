@@ -36,26 +36,4 @@ class Artifact
   def unlink
     @tmp_file.unlink
   end
-
-  private
-
-  def puppet_setting(setting)
-    unless Puppet.settings.app_defaults_initialized?
-      Puppet.settings.preferred_run_mode = :agent
-
-      Puppet.settings.initialize_global_settings([])
-      Puppet.settings.initialize_app_defaults(Puppet::Settings.app_defaults_for_run_mode(Puppet.run_mode))
-      Puppet.push_context(Puppet.base_context(Puppet.settings))
-    end
-
-    Puppet.settings[setting]
-  end
-
-  def hostcert
-    puppet_setting(:hostcert)
-  end
-
-  def hostprivkey
-    puppet_setting(:hostprivkey)
-  end
 end
