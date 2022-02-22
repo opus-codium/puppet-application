@@ -3,4 +3,5 @@ Gemfile:
   optional:
     ':test':
       - gem: cucumber
+      - gem: minitar
       - gem: mtree

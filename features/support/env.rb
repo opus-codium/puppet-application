@@ -8,3 +8,8 @@ def workaround_async_ci
   sleep(0.1)
   `sync`
 end
+
+After do
+  FileUtils.rm_r(@tmp_dir) if @tmp_dir
+  @tmp_dir = nil
+end

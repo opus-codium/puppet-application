@@ -7,6 +7,7 @@ group :test do
   gem 'voxpupuli-test', '~> 2.1',  :require => false
   gem 'simplecov-console',         :require => false
   gem 'cucumber',                  :require => false
+  gem 'minitar',                   :require => false
   gem 'mtree',                     :require => false
 end
 group :development do
