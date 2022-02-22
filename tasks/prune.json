@@ -1,0 +1,27 @@
+{
+  "description": "Prune old deployments of an application",
+  "input_method": "stdin",
+  "files": [
+    "application/tasks/utils/application_factory.rb",
+    "application/tasks/utils/application.rb",
+    "application/tasks/utils/applications_helper.rb",
+    "application/tasks/utils/artifact.rb",
+    "application/tasks/utils/deployment.rb",
+    "ruby_task_helper/files/task_helper.rb"
+  ],
+  "parameters": {
+    "application": {
+      "description": "The application to operate on",
+      "type": "String[1]"
+    },
+    "environment": {
+      "description": "The environment to operate on",
+      "type": "String[1]"
+    },
+    "keep": {
+      "description": "The number of MRU deployments to keep",
+      "type": "Integer[1]",
+      "default": 5
+    }
+  }
+}

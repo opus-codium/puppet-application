@@ -34,6 +34,10 @@ When('I remove the deployment {string} catching errors') do |name|
   end
 end
 
+When('I prune old deployments keeping the last {int}') do |keep|
+  @application.prune(keep)
+end
+
 Then('the current deployment should be {string}') do |target|
   step(%(the symbolic link "current" should point to "#{target}"))
 end

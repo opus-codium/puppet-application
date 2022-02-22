@@ -22,7 +22,6 @@ class Application
     deployment = Deployment.create(self, deployment_name, url)
 
     deployment.activate
-    prune_old_deployments
   end
 
   def deployments
@@ -82,8 +81,10 @@ class Application
     File.join(path, PERSISTENT_DATA)
   end
 
-  def prune_old_deployments
-    extra_deployments = deployments.values.sort_by(&:updated_at).slice(0...-5)
+  def prune(keep)
+    extra_deployments = deployments.values.sort_by(&:updated_at).slice(0...-keep)
+
+    # If there are less than keep deployments, do not attempt to remove the current one.
     extra_deployments.delete(current_deployment)
 
     extra_deployments.each(&:remove)
