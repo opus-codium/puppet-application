@@ -8,6 +8,19 @@ Feature: Deployments
     Then the deployment "v2-works" should exist
     Then the symbolic link "current" should point to "v2-works"
 
+  Scenario: Activate an old deployment
+    Given an application "app1"
+    And the following deployments:
+      | name |
+      | v1   |
+      | v2   |
+      | v3   |
+    When I activate the deployment "v2"
+    Then the deployments should be:
+      | name |
+      | v1   |
+      | v3   |
+      | v2   |
 
   Scenario: Prune old deployments
     Given an application "app1"
