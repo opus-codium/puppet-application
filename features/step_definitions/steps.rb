@@ -1,8 +1,8 @@
 require_relative '../../tasks/utils/application'
 
 Given('an application {string}') do |application|
-  tmp_dir = Dir.mktmpdir
-  @application_dir = "#{tmp_dir}/#{application}"
+  @tmp_dir = Dir.mktmpdir
+  @application_dir = "#{@tmp_dir}/#{application}"
   @application = Application.new(name: application, path: @application_dir)
 end
 

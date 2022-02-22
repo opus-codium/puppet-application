@@ -13,6 +13,10 @@ RSpec.describe Deployment do
 
   let(:path) { Dir.mktmpdir }
 
+  after do
+    FileUtils.rm_r(path)
+  end
+
   describe '#activate' do
     before do
       allow(application).to receive(:current_link_path).and_return("#{path}/current")
