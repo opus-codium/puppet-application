@@ -30,11 +30,15 @@ class Deployment
   end
 
   def deploy(url)
+    artifact = Artifact.new(url)
+    @name ||= artifact.deployment_name
+
+    raise 'Cannot infer deployment name and none specified' if name.nil?
+
     create_deployment_directory
     begin
       raise 'Aborted deployment: before_deploy hook failed' unless run_hook('before_deploy')
 
-      artifact = Artifact.new(url)
       artifact.extract_to(full_path)
       artifact.unlink
 
