@@ -8,10 +8,12 @@ require_relative '../../../../tasks/utils/deployment'
 RSpec.describe Deployment do
   subject(:deployment) { described_class.new(application, deployment_name) }
 
-  let(:application) { Application.new(name: 'app', path: path) }
+  let(:application) { Application.new(name: 'app', path: path, user_mapping: user_mapping, group_mapping: group_mapping) }
   let(:deployment_name) { '12345678' }
 
   let(:path) { Dir.mktmpdir }
+  let(:user_mapping) { {} }
+  let(:group_mapping) { {} }
 
   after do
     FileUtils.rm_r(path)
@@ -80,6 +82,38 @@ RSpec.describe Deployment do
 
         it { is_expected.to be_falsey }
       end
+    end
+  end
+
+  context '#persistent_data_specifications' do
+    subject { deployment.persistent_data_specifications }
+
+    let(:user_mapping) do
+      {
+        'john' => 'jane',
+      }
+    end
+    let(:group_mapping) do
+      {
+        'wheel' => 'root',
+      }
+    end
+
+    before do
+      parser = Mtree::Parser.new
+      parser.parse(<<~MTREE)
+      /set type=dir uname=root gname=wheel mode=0755
+      . nochange
+          tmp uname=john gname=john mode=0700
+          ..
+      ..
+      MTREE
+      allow(deployment).to receive(:persistent_data_specifications_load).and_return(parser.specifications)
+    end
+
+    it { is_expected.to have_attributes(uname: 'root', gname: 'root') }
+    it 'is expected to have its first children to have attributes {:gname => "john", :uname => "jane"}' do
+      expect(subject.children.first).to have_attributes(uname: 'jane', gname: 'john')
     end
   end
 end
