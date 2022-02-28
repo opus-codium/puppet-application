@@ -156,8 +156,8 @@ class Deployment
 
   def persistent_data_specifications_adjust_for_application(specifications)
     specifications.each do |specification|
-      specification.uname = application.user  if specification.uname == 'user'
-      specification.gname = application.group if specification.gname == 'user'
+      specification.uname = application.user_mapping.fetch(specification.uname, specification.uname)
+      specification.gname = application.group_mapping.fetch(specification.gname, specification.gname)
     end
 
     specifications

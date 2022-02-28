@@ -6,16 +6,17 @@ class Application
   CURRENT         = 'current'
   PERSISTENT_DATA = 'persistent-data'
 
-  attr_reader :name, :path, :deploy_user, :deploy_group, :kind
+  attr_reader :name, :path, :deploy_user, :deploy_group, :kind, :user_mapping, :group_mapping
 
-  def initialize(name:, path:, environment: nil, deploy_user: nil, deploy_group: nil, kind: nil, user_mapping: {})
-    @name         = name
-    @path         = path
-    @environment  = environment
-    @deploy_user  = deploy_user
-    @deploy_group = deploy_group
-    @kind         = kind
-    @user_mapping = user_mapping
+  def initialize(name:, path:, environment: nil, deploy_user: nil, deploy_group: nil, kind: nil, user_mapping: {}, group_mapping: {})
+    @name          = name
+    @path          = path
+    @environment   = environment
+    @deploy_user   = deploy_user
+    @deploy_group  = deploy_group
+    @kind          = kind
+    @user_mapping  = user_mapping
+    @group_mapping = group_mapping
   end
 
   def deploy(url, deployment_name)
