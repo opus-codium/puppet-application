@@ -2,4 +2,4 @@
 application::common::configuration_root: /usr/local/etc/applications
 application::common::configuration_user: root
 application::common::configuration_group: wheel
-application::common::mtree_provider: gem
+application::common::gem_dependencies_provider: gem
