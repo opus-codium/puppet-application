@@ -4,6 +4,14 @@ require 'minitar'
 require 'puppet'
 require 'tempfile'
 
+module TrustedSSLProvider
+  def create_x509_store(roots, crls, revocation)
+    store = super
+    store.set_default_paths
+    store
+  end
+end
+
 class Artifact
   attr_reader :deployment_name
 
@@ -19,13 +27,23 @@ class Artifact
   end
 
   def download(url)
+    initialize_puppet
     client = Puppet.runtime[:http]
-    client.get(URI(url), options: { include_system_store: true }) do |response|
-      if response.success?
-        File.open(@tmp_file.path, 'w') do |f|
-          response.read_body do |data|
-            f.write(data)
-          end
+    ssl_provider = Puppet::SSL::SSLProvider.new
+    # FIXME: Drop the TrustedSSLProvider module above when Puppet allow mixing
+    # system CA and Puppet client certificate authentication
+    #
+    # PR: https://github.com/puppetlabs/puppet/pull/8887
+    #
+    # This would result on using this:
+    #   client.get(URI(url), options: { ssl_context: ssl_provider.load_context(revocation: false, include_system_store: true) }) do |response|
+    ssl_provider.extend TrustedSSLProvider
+    client.get(URI(url), options: { ssl_context: ssl_provider.load_context(revocation: false) }) do |response|
+      raise 'Failed to download artifact' unless response.success?
+
+      File.open(@tmp_file.path, 'w') do |f|
+        response.read_body do |data|
+          f.write(data)
         end
       end
     end
@@ -44,6 +62,16 @@ class Artifact
   end
 
   private
+
+  def initialize_puppet
+    return if Puppet.settings.app_defaults_initialized?
+
+    Puppet.settings.preferred_run_mode = :agent
+
+    Puppet.settings.initialize_global_settings([])
+    Puppet.settings.initialize_app_defaults(Puppet::Settings.app_defaults_for_run_mode(Puppet.run_mode))
+    Puppet.push_context(Puppet.base_context(Puppet.settings))
+  end
 
   def read_deployment_name
     res = nil
