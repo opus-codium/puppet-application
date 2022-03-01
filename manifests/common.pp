@@ -5,7 +5,7 @@ class application::common (
   Stdlib::Absolutepath $configuration_root,
   String[1] $configuration_user,
   String[1] $configuration_group,
-  Enum['gem', 'puppet_gem'] $mtree_provider,
+  Enum['gem', 'puppet_gem'] $gem_dependencies_provider,
 ) {
   assert_private()
 
@@ -25,5 +25,5 @@ class application::common (
     mode   => '0644',
   }
 
-  ensure_packages('mtree', { ensure => installed, provider => $mtree_provider })
+  ensure_packages(['minitar', 'mtree'], { ensure => installed, provider => $gem_dependencies_provider })
 }
