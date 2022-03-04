@@ -120,6 +120,18 @@ class Deployment
       Process.gid = application.deploy_group if application.deploy_group
       Process.uid = application.deploy_user  if application.deploy_user
 
+      ENV['APPLICATION'] = application.name
+      ENV['ENVIRONMENT'] = application.environment
+      ENV['DEPLOYMENT_NAME'] = name
+
+      application.user_mapping.each do |user, actual|
+        ENV["USER_MAPPING_#{user}"] = actual
+      end
+
+      application.group_mapping.each do |user, actual|
+        ENV["GROUP_MAPPING_#{user}"] = actual
+      end
+
       FileUtils.chdir(full_path) do
         exec(hook)
       end
