@@ -105,11 +105,11 @@ class Deployment
     FileUtils.rm_rf(full_path)
   end
 
-  private
-
   def full_path
     File.join(application.path, name)
   end
+
+  private
 
   def run_hook(name)
     hook = hook_path(name)
