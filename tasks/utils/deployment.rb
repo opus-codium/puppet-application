@@ -35,18 +35,19 @@ class Deployment
 
     raise 'Cannot infer deployment name and none specified' if name.nil?
 
-    create_deployment_directory
-    begin
-      raise 'Aborted deployment: before_deploy hook failed' unless run_hook('before_deploy')
+    creating_deployment_directory do
+      begin
+        raise 'Aborted deployment: before_deploy hook failed' unless run_hook('before_deploy')
 
-      artifact.extract_to(full_path)
-      artifact.unlink
+        artifact.extract_to(full_path)
+        artifact.unlink
 
-      application.setup_persistent_data(self)
-      application.link_persistent_data(self)
-    rescue => e
-      remove
-      raise e
+        application.setup_persistent_data(self)
+        application.link_persistent_data(self)
+      rescue => e
+        remove
+        raise e
+      end
     end
     run_hook('after_deploy')
   end
@@ -104,11 +105,11 @@ class Deployment
     FileUtils.rm_rf(full_path)
   end
 
-  private
-
   def full_path
     File.join(application.path, name)
   end
+
+  private
 
   def run_hook(name)
     hook = hook_path(name)
@@ -137,11 +138,14 @@ class Deployment
     path if File.executable?(path)
   end
 
-  def create_deployment_directory
+  def creating_deployment_directory
     raise "File exist: #{full_path}" if File.directory?(full_path)
 
     FileUtils.mkdir_p(full_path)
-    FileUtils.chown(application.deploy_user, application.deploy_group, full_path)
+
+    yield
+
+    FileUtils.chown_R(application.deploy_user, application.deploy_group, full_path)
   end
 
   def persistent_data_specifications_load
