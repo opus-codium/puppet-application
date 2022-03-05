@@ -5,10 +5,14 @@ require 'spec_helper'
 require_relative '../../../../tasks/utils/application'
 require_relative '../../../../tasks/utils/deployment'
 
+def fixture(file)
+  File.join(__dir__, '..', '..', 'fixtures', file)
+end
+
 RSpec.describe Deployment do
   subject(:deployment) { described_class.new(application, deployment_name) }
 
-  let(:application) { Application.new(name: 'app', path: path, user_mapping: user_mapping, group_mapping: group_mapping) }
+  let(:application) { Application.new(name: 'app', environment: 'production', path: path, deploy_user: Process.uid, deploy_group: Process.gid, user_mapping: user_mapping, group_mapping: group_mapping) }
   let(:deployment_name) { '12345678' }
 
   let(:path) { Dir.mktmpdir }
@@ -69,7 +73,7 @@ RSpec.describe Deployment do
     end
 
     context 'with another application' do
-      let(:other_application) { Application.new(name: 'another-instance-with-the-same-path', path: path) }
+      let(:other_application) { Application.new(name: 'another-instance-with-the-same-path', environment: 'production', path: path, deploy_user: Process.uid, deploy_group: Process.gid, user_mapping: user_mapping, group_mapping: group_mapping) }
 
       context 'with the same deployment name' do
         let(:other_deployment_name) { deployment_name }
@@ -114,6 +118,50 @@ RSpec.describe Deployment do
     it { is_expected.to have_attributes(uname: 'root', gname: 'root') }
     it 'is expected to have its first children to have attributes {:gname => "john", :uname => "jane"}' do
       expect(subject.children.first).to have_attributes(uname: 'jane', gname: 'john')
+    end
+  end
+
+  context 'with deploy hooks' do
+    subject { deployment.deploy(url) }
+
+    let(:url) { double }
+
+    before do
+      artifact = double
+      allow(Artifact).to receive(:new).with(url).and_return(artifact)
+      allow(artifact).to receive(:extract_to)
+      allow(artifact).to receive(:unlink)
+      allow(application).to receive(:setup_persistent_data)
+      allow(application).to receive(:link_persistent_data)
+      allow(deployment).to receive(:run_hook).with('before_deploy').and_call_original
+      allow(deployment).to receive(:run_hook).with('after_deploy').and_call_original
+    end
+
+    it 'returns true when all hooks succeed' do
+      allow(deployment).to receive(:hook_path).with('before_deploy').and_return(fixture('success_hook'))
+      allow(deployment).to receive(:hook_path).with('after_deploy').and_return(fixture('success_hook'))
+
+      expect(deployment.deploy(url)).to be_truthy
+      expect(deployment).to have_received(:run_hook).with('before_deploy')
+      expect(deployment).to have_received(:run_hook).with('after_deploy')
+    end
+
+    it 'raise when the before deployment hook fail' do
+      allow(deployment).to receive(:hook_path).with('before_deploy').and_return(fixture('failure_hook'))
+      allow(deployment).to receive(:hook_path).with('after_deploy').and_return(fixture('success_hook'))
+
+      expect { deployment.deploy(url) }.to raise_exception('Aborted deployment: before_deploy hook failed')
+      expect(deployment).to have_received(:run_hook).with('before_deploy')
+      expect(deployment).not_to have_received(:run_hook).with('after_deploy')
+    end
+
+    it 'return false when the after deployment hook fail' do
+      allow(deployment).to receive(:hook_path).with('before_deploy').and_return(fixture('success_hook'))
+      allow(deployment).to receive(:hook_path).with('after_deploy').and_return(fixture('failure_hook'))
+
+      expect(deployment.deploy(url)).to be_falsey
+      expect(deployment).to have_received(:run_hook).with('before_deploy')
+      expect(deployment).to have_received(:run_hook).with('after_deploy')
     end
   end
 end

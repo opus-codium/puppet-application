@@ -3,7 +3,7 @@ require_relative '../../tasks/utils/application'
 Given('an application {string}') do |application|
   @tmp_dir = Dir.mktmpdir
   @application_dir = "#{@tmp_dir}/#{application}"
-  @application = Application.new(name: application, path: @application_dir)
+  @application = Application.new(name: application, path: @application_dir, environment: 'production', deploy_user: Process.uid, deploy_group: Process.gid, user_mapping: {}, group_mapping: {})
 end
 
 Given('the following deployments:') do |table|
