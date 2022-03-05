@@ -1,4 +1,4 @@
-# @summary Declane an application to orchestrate deployments
+# @summary Declare an application to orchestrate deployments
 #
 # @param application Name of the application to deploy
 # @param environment Environment of the application to deploy
