@@ -12,7 +12,7 @@ end
 RSpec.describe Deployment do
   subject(:deployment) { described_class.new(application, deployment_name) }
 
-  let(:application) { Application.new(name: 'app', path: path, user_mapping: user_mapping, group_mapping: group_mapping) }
+  let(:application) { Application.new(name: 'app', environment: 'production', path: path, deploy_user: Process.uid, deploy_group: Process.gid, user_mapping: user_mapping, group_mapping: group_mapping) }
   let(:deployment_name) { '12345678' }
 
   let(:path) { Dir.mktmpdir }
@@ -73,7 +73,7 @@ RSpec.describe Deployment do
     end
 
     context 'with another application' do
-      let(:other_application) { Application.new(name: 'another-instance-with-the-same-path', path: path) }
+      let(:other_application) { Application.new(name: 'another-instance-with-the-same-path', environment: 'production', path: path, deploy_user: Process.uid, deploy_group: Process.gid, user_mapping: user_mapping, group_mapping: group_mapping) }
 
       context 'with the same deployment name' do
         let(:other_deployment_name) { deployment_name }
