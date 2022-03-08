@@ -1,8 +1,6 @@
 #!/opt/puppetlabs/puppet/bin/ruby
 # frozen_string_literal: true
 
-require 'open3'
-
 require_relative '../../ruby_task_helper/files/task_helper'
 
 require_relative 'utils/application_factory'
