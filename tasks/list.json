@@ -1,0 +1,12 @@
+{
+  "description": "List applications and deployments",
+  "input_method": "stdin",
+  "files": [
+    "application/tasks/utils/application_factory.rb",
+    "application/tasks/utils/application.rb",
+    "application/tasks/utils/applications_helper.rb",
+    "application/tasks/utils/artifact.rb",
+    "application/tasks/utils/deployment.rb",
+    "ruby_task_helper/files/task_helper.rb"
+  ]
+}

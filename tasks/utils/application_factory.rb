@@ -7,6 +7,10 @@ require_relative 'application'
 require_relative 'applications_helper'
 
 class ApplicationFactory
+  def self.all
+    find(nil, nil)
+  end
+
   def self.find(application, environment)
     configuration_metadata_for(application, environment).map do |spec|
       Application.new(spec)
@@ -15,8 +19,12 @@ class ApplicationFactory
 
   def self.configuration_metadata_for(application, environment)
     res = load_configuration_metadata.filter do |spec|
-      spec['application'] == application &&
-        spec['environment'] == environment
+      match = true
+
+      match = false if application && spec['application'] != application
+      match = false if environment && spec['environment'] != environment
+
+      match
     end
 
     res.map do |spec|
