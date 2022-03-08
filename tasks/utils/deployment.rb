@@ -116,6 +116,8 @@ class Deployment
       Process.gid = application.deploy_group if application.deploy_group
       Process.uid = application.deploy_user  if application.deploy_user
 
+      ENV.delete_if { |variable| variable !~ /^LC_/ }
+
       ENV['APPLICATION'] = application.name
       ENV['ENVIRONMENT'] = application.environment
       ENV['DEPLOYMENT_NAME'] = name
