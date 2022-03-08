@@ -131,7 +131,7 @@ class Deployment
       end
 
       FileUtils.chdir(full_path) do
-        exec(hook)
+        Process.exec(hook)
       end
     end
 
