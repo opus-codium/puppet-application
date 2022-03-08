@@ -83,10 +83,6 @@ class Deployment
     run_hook('after_activate')
   end
 
-  def created_at
-    File.stat(full_path).ctime
-  end
-
   def updated_at
     File.stat(full_path).mtime
   end

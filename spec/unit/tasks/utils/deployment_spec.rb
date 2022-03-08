@@ -34,23 +34,6 @@ RSpec.describe Deployment do
     it { expect { deployment.activate }.not_to raise_exception }
   end
 
-  describe '#created_at' do
-    subject { deployment.created_at }
-
-    let(:ctime) { double }
-    let(:stat) do
-      stat = double
-      allow(stat).to receive(:ctime).and_return(ctime)
-      stat
-    end
-
-    before do
-      allow(File).to receive(:stat).with("#{path}/12345678").and_return(stat)
-    end
-
-    it { is_expected.to eq(ctime) }
-  end
-
   describe '#<=>' do
     subject { deployment == other }
 
