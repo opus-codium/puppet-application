@@ -83,10 +83,6 @@ class Deployment
     run_hook('after_activate')
   end
 
-  def created_at
-    File.stat(full_path).ctime
-  end
-
   def updated_at
     File.stat(full_path).mtime
   end
@@ -120,6 +116,8 @@ class Deployment
       Process.gid = application.deploy_group if application.deploy_group
       Process.uid = application.deploy_user  if application.deploy_user
 
+      ENV.delete_if { |variable| variable !~ /^LC_/ }
+
       ENV['APPLICATION'] = application.name
       ENV['ENVIRONMENT'] = application.environment
       ENV['DEPLOYMENT_NAME'] = name
@@ -133,7 +131,7 @@ class Deployment
       end
 
       FileUtils.chdir(full_path) do
-        exec(hook)
+        Process.exec(hook)
       end
     end
 
