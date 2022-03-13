@@ -115,9 +115,11 @@ class Deployment
 
       ENV.delete_if { |variable| variable !~ /^LC_/ }
 
-      ENV['APPLICATION'] = application.name
+      ENV['APPLICATION_NAME'] = application.name
+      ENV['APPLICATION_PATH'] = application.path
       ENV['ENVIRONMENT'] = application.environment
       ENV['DEPLOYMENT_NAME'] = name
+      ENV['DEPLOYMENT_PATH'] = path
 
       application.user_mapping.each do |user, actual|
         ENV["USER_MAPPING_#{user}"] = actual
