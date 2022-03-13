@@ -2,6 +2,7 @@
 #
 # @param application Name of the application to deploy
 # @param environment Environment of the application to deploy
+# @param path Path of the application
 # @param deploy_user User used to deploy the application
 # @param deploy_group Group used to deploy the application
 # @param user_mapping User mapping for managing deployment file permissions
@@ -10,6 +11,7 @@
 define application (
   String[1] $application,
   String[1] $environment,
+  Stdlib::Absolutepath $path                = $name,
   Optional[String[1]] $deploy_user          = undef,
   Optional[String[1]] $deploy_group         = undef,
   Hash[String[1], String[1]] $user_mapping  = {},
@@ -23,7 +25,7 @@ define application (
     content => [
       {
         application   => $application,
-        path          => $name,
+        path          => $path,
         kind          => $kind,
         environment   => $environment,
         deploy_user   => $deploy_user,
