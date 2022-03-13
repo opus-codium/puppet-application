@@ -18,7 +18,7 @@
 # * `APPLICATION_PATH` - The path of the application (e.g. "/opt/acme")
 # * `ENVIRONMENT` - The name of the environment (e.g. "production")
 # * `DEPLOYMENT_NAME` - The name of the deployment (e.g. "d3")
-# * `DEPLOYMENT_PACH` - The path of the deployment (e.g. "/opt/acme/d3")
+# * `DEPLOYMENT_PATH` - The path of the deployment (e.g. "/opt/acme/d3")
 # * `USER_MAPPING_*` - User mappings
 # * `GROUP_MAPPING_*` - Group mappings
 #
