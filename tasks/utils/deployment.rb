@@ -9,7 +9,7 @@ require_relative 'artifact'
 class Deployment
   include Comparable
 
-  attr_reader :application, :name
+  attr_reader :application, :name, :path
 
   def <=>(other)
     res = application <=> other.application
@@ -21,6 +21,7 @@ class Deployment
   def initialize(application, name)
     @application = application
     @name = name
+    @path = File.join(application.path, name)
   end
 
   def self.create(application, name, url)
@@ -39,7 +40,7 @@ class Deployment
       begin
         raise 'Aborted deployment: before_deploy hook failed' unless run_hook('before_deploy')
 
-        artifact.extract_to(full_path)
+        artifact.extract_to(path)
         artifact.unlink
 
         application.setup_persistent_data(self)
@@ -57,7 +58,7 @@ class Deployment
   end
 
   def activate
-    raise "#{full_path} is not a valid deployment path" unless File.directory?(full_path)
+    raise "#{path} is not a valid deployment path" unless File.directory?(path)
     raise 'Aborted activation: before_activate hook failed' unless run_hook('before_activate')
 
     # We need to remove the existing symlink otherwise the link is
@@ -78,13 +79,13 @@ class Deployment
     # `-> new_deploy
 
     FileUtils.rm_f(application.current_link_path)
-    FileUtils.ln_s(full_path, application.current_link_path)
-    FileUtils.touch(full_path)
+    FileUtils.ln_s(path, application.current_link_path)
+    FileUtils.touch(path)
     run_hook('after_activate')
   end
 
   def updated_at
-    File.stat(full_path).mtime
+    File.stat(path).mtime
   end
 
   def persistent_data_specifications
@@ -98,11 +99,7 @@ class Deployment
   def remove
     raise 'Cannot remove the active deployment' if active?
 
-    FileUtils.rm_rf(full_path)
-  end
-
-  def full_path
-    File.join(application.path, name)
+    FileUtils.rm_rf(path)
   end
 
   private
@@ -130,7 +127,7 @@ class Deployment
         ENV["GROUP_MAPPING_#{user}"] = actual
       end
 
-      FileUtils.chdir(full_path) do
+      FileUtils.chdir(path) do
         Process.exec(hook)
       end
     end
@@ -149,17 +146,17 @@ class Deployment
   end
 
   def creating_deployment_directory
-    raise "File exist: #{full_path}" if File.directory?(full_path)
+    raise "File exist: #{path}" if File.directory?(path)
 
-    FileUtils.mkdir_p(full_path)
+    FileUtils.mkdir_p(path)
 
     yield
 
-    FileUtils.chown_R(application.deploy_user, application.deploy_group, full_path)
+    FileUtils.chown_R(application.deploy_user, application.deploy_group, path)
   end
 
   def persistent_data_specifications_load
-    mtree_file = File.join(full_path, '.mtree')
+    mtree_file = File.join(path, '.mtree')
 
     return nil unless File.exist?(mtree_file)
 
