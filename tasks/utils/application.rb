@@ -75,7 +75,7 @@ class Application
     spec.leaves!
     spec.symlink_to!(persistent_data_path)
 
-    spec.enforce(deployment.full_path)
+    spec.enforce(deployment.path)
   end
 
   def persistent_data_path
