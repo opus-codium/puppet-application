@@ -5,15 +5,15 @@ application::kind { 'rails':
     export RAILS_ENV=production
     bundle install --deployment
     bundle exec rake assets precompile
-    bundle exec rake db:migrate
     | SH
   before_activate_content => @(SH),
     #!/bin/sh
-    ./scripts/lb-manage detach drain
+    export RAILS_ENV=production
+    bundle exec rake db:migrate
     | SH
   after_activate_content  => @(SH),
     #!/bin/sh
-    ./scripts/lb-manage attach
+    touch tmp/restart.txt
     | SH
 }
 # lint:endignore
