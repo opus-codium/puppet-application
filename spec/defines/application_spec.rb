@@ -3,11 +3,12 @@
 require 'spec_helper'
 
 describe 'application' do
-  let(:title) { '/opt/acme' }
+  let(:title) { 'acme' }
   let(:params) do
     {
       application: 'acme',
       environment: 'production',
+      path: '/opt/acme',
     }
   end
 

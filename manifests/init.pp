@@ -11,7 +11,7 @@
 define application (
   String[1] $application,
   String[1] $environment,
-  Stdlib::Absolutepath $path                = $name,
+  Stdlib::Absolutepath $path,
   Optional[String[1]] $deploy_user          = undef,
   Optional[String[1]] $deploy_group         = undef,
   Hash[String[1], String[1]] $user_mapping  = {},
@@ -24,6 +24,7 @@ define application (
     target  => $application::common::configuration_file,
     content => [
       {
+        title         => $title,
         application   => $application,
         path          => $path,
         kind          => $kind,
@@ -34,5 +35,12 @@ define application (
         group_mapping => $group_mapping,
       },
     ].to_yaml.regsubst("\\A---\n", ''),
+  }
+
+  file { $path:
+    ensure => directory,
+    owner  => $deploy_user,
+    group  => $deploy_group,
+    mode   => '0755',
   }
 }

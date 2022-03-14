@@ -18,15 +18,21 @@ application::kind { 'rails':
 }
 # lint:endignore
 
-application { '/srv/www/garden-party-prod':
+file { '/srv/www':
+  ensure => directory,
+}
+
+application { 'garden-party-prod':
   application => 'garden-party',
   environment => 'production',
+  path        => '/srv/www/garden-party-prod',
   kind        => 'rails',
 }
 
-application { '/srv/www/garden-party-dev':
+application { 'garden-party-dev':
   application  => 'garden-party',
   environment  => 'development',
+  path         => '/srv/www/garden-party-dev',
   kind         => 'rails',
   user_mapping => {
     'gardener' => 'wormy',

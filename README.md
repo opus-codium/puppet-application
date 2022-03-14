@@ -20,12 +20,13 @@ This Puppet module provide tooling for Continuous Delivery (CD) of applications 
 
 ### Declaring an application
 
-Each application is declared as an `application` resource. They are identified by a `path` (namevar), an `application` name and an `environment` name:
+Each application is declared as an `application` resource. They are identified by a unique `title`, an `application` name, an `environment` name and a `path`:
 
 ```puppet
-application { '/opt/acme':
+application { 'acme':
   application => 'acme',
   environment => 'production',
+  path        => '/opt/acme',
 }
 ```
 
@@ -43,9 +44,10 @@ Your profile is likely to declare an `application` resource and appitional resou
 
 ```puppet
 class profile::acme {
-  application { '/opt/acme':
+  application { 'acme':
     application => 'acme',
     environment => 'production',
+    path        => '/opt/acme',
   }
 
   file { '/usr/local/bin/acme-runner':
