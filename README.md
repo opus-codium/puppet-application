@@ -14,22 +14,23 @@
 
 ## Module description
 
-This Puppet module provide tooling for Continuous Delivery (CD) of applications in a Puppet managed envirorment by leveraging orchestration through [Bolt](https://puppet.com/docs/bolt/latest/bolt.html) or [Choria](https://choria.io/).
+This Puppet module provide tooling for Continuous Delivery (CD) of applications in a Puppet managed environment by leveraging orchestration through [Bolt](https://puppet.com/docs/bolt/latest/bolt.html) or [Choria](https://choria.io/).
 
 ## Usage
 
 ### Declaring an application
 
-Each application is declared as an `application` resource. They are identified by a `path` (namevar), an `application` name and an `environment` name:
+Each application is declared as an `application` resource. They are identified by a unique `title`, an `application` name, an `environment` name and a `path`:
 
 ```puppet
-application { '/opt/acme':
+application { 'acme':
   application => 'acme',
   environment => 'production',
+  path        => '/opt/acme',
 }
 ```
 
-On disc, this will resurlt in this directory hierarchy (assubing 3 deployments are created: `d1`, `d2`, `d3`):
+On disc, this will result in this directory hierarchy (assuming 3 deployments are created: `d1`, `d2`, `d3`):
 
 ```
 /opt/acme/
@@ -39,13 +40,14 @@ On disc, this will resurlt in this directory hierarchy (assubing 3 deployments a
 `-> d3/
 ```
 
-Your profile is likely to declare an `application` resource and appitional resources that make it useful and point in the `current` directory:
+Your profile is likely to declare an `application` resource and additional resources that make it useful and point in the `current` directory:
 
 ```puppet
 class profile::acme {
-  application { '/opt/acme':
+  application { 'acme':
     application => 'acme',
     environment => 'production',
+    path        => '/opt/acme',
   }
 
   file { '/usr/local/bin/acme-runner':
@@ -85,7 +87,7 @@ Assuming a `.mtree` file is added at the root of the previous project containing
 ..
 ```
 
-On the next deployment `d4`, the described hierarchy tree will be created in the `persistent-data` directory, and all files corresponding to leaves of this tree in the deployment will be removed and replaced by symbolic-links to the corresponding persitent-data file:
+On the next deployment `d4`, the described hierarchy tree will be created in the `persistent-data` directory, and all files corresponding to leaves of this tree in the deployment will be removed and replaced by symbolic-links to the corresponding persistent-data file:
 
 ```
 /opt/acme/

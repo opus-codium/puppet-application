@@ -5,28 +5,34 @@ application::kind { 'rails':
     export RAILS_ENV=production
     bundle install --deployment
     bundle exec rake assets precompile
-    bundle exec rake db:migrate
     | SH
   before_activate_content => @(SH),
     #!/bin/sh
-    ./scripts/lb-manage detach drain
+    export RAILS_ENV=production
+    bundle exec rake db:migrate
     | SH
   after_activate_content  => @(SH),
     #!/bin/sh
-    ./scripts/lb-manage attach
+    touch tmp/restart.txt
     | SH
 }
 # lint:endignore
 
-application { '/srv/www/garden-party-prod':
+file { '/srv/www':
+  ensure => directory,
+}
+
+application { 'garden-party-prod':
   application => 'garden-party',
   environment => 'production',
+  path        => '/srv/www/garden-party-prod',
   kind        => 'rails',
 }
 
-application { '/srv/www/garden-party-dev':
+application { 'garden-party-dev':
   application  => 'garden-party',
   environment  => 'development',
+  path         => '/srv/www/garden-party-dev',
   kind         => 'rails',
   user_mapping => {
     'gardener' => 'wormy',
