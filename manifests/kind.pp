@@ -1,4 +1,28 @@
-# @summary Declare a kind of application deployment
+# @summary Declare a set of hooks for application deployment
+#
+# Hooks are run from the deployment directory as the user configured by `deploy_user` in the application.
+#
+# The following hooks are available:
+#
+# * before_deploy
+# * after_deploy
+# * before_activate
+# * after_activate
+#
+# A `before_*` hook returning with a non-zero exit code aborts the operation.
+# The exit code of `after_*` hooks is ignored.
+#
+# The following environment variables are set for each hook invocation:
+#
+# * `APPLICATION_NAME` - The name of the application (e.g. "acme")
+# * `APPLICATION_PATH` - The path of the application (e.g. "/opt/acme")
+# * `ENVIRONMENT` - The name of the environment (e.g. "production")
+# * `DEPLOYMENT_NAME` - The name of the deployment (e.g. "d3")
+# * `DEPLOYMENT_PACH` - The path of the deployment (e.g. "/opt/acme/d3")
+# * `USER_MAPPING_*` - User mappings
+# * `GROUP_MAPPING_*` - Group mappings
+#
+# Each hook can be set using the corresponding `*_content` or `*_source` parameter.
 #
 # @param before_deploy_content
 # @param before_deploy_source
