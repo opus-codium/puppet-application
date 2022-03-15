@@ -1,9 +1,19 @@
 require_relative '../../tasks/utils/application'
 
 Given('an application {string}') do |application|
+  step(%(an application "#{application}" with retention 1..∞))
+end
+
+Given('an application {string} with retention {int}..{word}') do |application, min, max|
+  max = if max == '∞'
+          nil
+        else
+          Integer(max)
+        end
+
   @tmp_dir = Dir.mktmpdir
   @application_dir = "#{@tmp_dir}/#{application}"
-  @application = Application.new(name: application, path: @application_dir, environment: 'production', deploy_user: Process.uid, deploy_group: Process.gid, user_mapping: {}, group_mapping: {})
+  @application = Application.new(name: application, path: @application_dir, environment: 'production', deploy_user: Process.uid, deploy_group: Process.gid, user_mapping: {}, group_mapping: {}, retention_min: min, retention_max: max)
 end
 
 Given('the following deployments:') do |table|
