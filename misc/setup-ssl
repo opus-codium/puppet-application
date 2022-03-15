@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+if [ -d ssl ]; then
+	echo "Directory ssl already exists" >&2
+	exit 1
+fi
+
+set -x
+
+docker build -f Dockerfile-choria-enroll -t opuscodium/choria-enroll .
+install -d -o 2049 -g 2049 -m 750 ssl
+docker run -it --rm -v $PWD/ssl:/home/deploy/.puppetlabs/etc/puppet/ssl opuscodium/choria-enroll
+docker rmi opuscodium/choria-enroll
