@@ -47,3 +47,28 @@ Feature: Deployments
     Then the deployments should be:
       | name      |
       | v5-works  |
+  Scenario: Automatic prunning of deployments
+    Given an application "app1" with retention 1..2
+    And the following deployments:
+      | name |
+      | v1   |
+      | v2   |
+    When I create a deployment "v3"
+    Then the deployments should be:
+      | name |
+      | v2   |
+      | v3   |
+  Scenario: Minimum number of deployments
+    Given an application "app1" with retention 3..5
+    And the following deployments:
+      | name |
+      | v1   |
+      | v2   |
+      | v3   |
+      | v4   |
+    When I prune old deployments keeping the last 1
+    Then the deployments should be:
+      | name |
+      | v2   |
+      | v3   |
+      | v4   |

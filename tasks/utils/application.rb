@@ -6,9 +6,9 @@ class Application
   CURRENT         = 'current'
   PERSISTENT_DATA = 'persistent-data'
 
-  attr_reader :name, :path, :environment, :deploy_user, :deploy_group, :user_mapping, :group_mapping, :kind
+  attr_reader :name, :path, :environment, :deploy_user, :deploy_group, :user_mapping, :group_mapping, :retention_min, :retention_max, :kind
 
-  def initialize(name:, path:, environment:, deploy_user:, deploy_group:, user_mapping:, group_mapping:, kind: nil)
+  def initialize(name:, path:, environment:, deploy_user:, deploy_group:, user_mapping:, group_mapping:, retention_min:, retention_max:, kind: nil)
     @name          = name
     @path          = path
     @environment   = environment
@@ -17,12 +17,16 @@ class Application
     @kind          = kind
     @user_mapping  = user_mapping
     @group_mapping = group_mapping
+    @retention_min = retention_min
+    @retention_max = retention_max
   end
 
   def deploy(url, deployment_name)
     deployment = Deployment.create(self, deployment_name, url)
 
     deployment.activate
+
+    prune(retention_max) if retention_max
   end
 
   def deployments
@@ -83,6 +87,8 @@ class Application
   end
 
   def prune(keep)
+    keep = [keep, retention_min].max
+
     extra_deployments = deployments.values.sort_by(&:updated_at).slice(0...-keep)
 
     # If there are less than keep deployments, do not attempt to remove the current one.
