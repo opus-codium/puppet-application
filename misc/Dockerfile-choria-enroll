@@ -1,0 +1,23 @@
+FROM choria/choria
+
+USER root
+
+# Puppet is required for task input validation
+RUN yum -y install wget && \
+    wget 'https://yum.puppetlabs.com/puppet7-release-el-8.noarch.rpm' && \
+    rpm -i puppet7-release-el-8.noarch.rpm && \
+    yum -y install puppet-agent
+
+RUN /opt/puppetlabs/puppet/bin/gem install --bindir /opt/puppetlabs/bin choria-mcorpc-support
+
+RUN groupadd --gid 2049 deploy && \
+    useradd -c "Choria Orchestrator" -m --uid 2049 --gid 2049 deploy && \
+    install -d -o deploy -g deploy -m 0750 /home/deploy/.puppetlabs/etc/puppet/ssl
+
+COPY client.conf /etc/choria/client.conf
+
+ENV USER="deploy"
+
+USER "deploy"
+
+ENTRYPOINT ["/usr/bin/choria", "enroll"]

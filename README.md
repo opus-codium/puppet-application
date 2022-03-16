@@ -91,7 +91,7 @@ On the next deployment `d4`, the described hierarchy tree will be created in the
 
 ```
 /opt/acme/
-|-> current@ -> /opt/acme/d3
+|-> current@ -> /opt/acme/d4
 |-> d1/
 |-> d2/
 |-> d3/
