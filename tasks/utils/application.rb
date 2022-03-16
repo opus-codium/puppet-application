@@ -6,9 +6,10 @@ class Application
   CURRENT         = 'current'
   PERSISTENT_DATA = 'persistent-data'
 
-  attr_reader :name, :path, :environment, :deploy_user, :deploy_group, :user_mapping, :group_mapping, :retention_min, :retention_max, :kind
+  attr_reader :title, :name, :path, :environment, :deploy_user, :deploy_group, :user_mapping, :group_mapping, :retention_min, :retention_max, :kind
 
-  def initialize(name:, path:, environment:, deploy_user:, deploy_group:, user_mapping:, group_mapping:, retention_min:, retention_max:, kind: nil)
+  def initialize(title:, name:, path:, environment:, deploy_user:, deploy_group:, user_mapping:, group_mapping:, retention_min:, retention_max:, kind: nil)
+    @title         = title
     @name          = name
     @path          = path
     @environment   = environment

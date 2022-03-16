@@ -13,7 +13,7 @@ Given('an application {string} with retention {int}..{word}') do |application, m
 
   @tmp_dir = Dir.mktmpdir
   @application_dir = "#{@tmp_dir}/#{application}"
-  @application = Application.new(name: application, path: @application_dir, environment: 'production', deploy_user: Process.uid, deploy_group: Process.gid, user_mapping: {}, group_mapping: {}, retention_min: min, retention_max: max)
+  @application = Application.new(title: application, name: application, path: @application_dir, environment: 'production', deploy_user: Process.uid, deploy_group: Process.gid, user_mapping: {}, group_mapping: {}, retention_min: min, retention_max: max)
 end
 
 Given('the following deployments:') do |table|
