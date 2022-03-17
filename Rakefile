@@ -48,6 +48,7 @@ begin
       HEADER
     config.exclude_labels = %w{duplicate question invalid wontfix wont-fix modulesync skip-changelog ignore}
     config.user = 'opus-codium'
+    config.since_tag = '1.0.0'
     metadata_json = File.join(File.dirname(__FILE__), 'metadata.json')
     metadata = JSON.load(File.read(metadata_json))
     config.project = "puppet-#{metadata['name'].split('-').last}"
