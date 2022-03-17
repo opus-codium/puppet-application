@@ -46,6 +46,8 @@ The following parameters are available in the `application` defined type:
 * [`user_mapping`](#user_mapping)
 * [`group_mapping`](#group_mapping)
 * [`kind`](#kind)
+* [`retention_min`](#retention_min)
+* [`retention_max`](#retention_max)
 
 ##### <a name="application"></a>`application`
 
@@ -64,8 +66,6 @@ Environment of the application to deploy
 Data type: `Stdlib::Absolutepath`
 
 Path of the application
-
-Default value: `$name`
 
 ##### <a name="deploy_user"></a>`deploy_user`
 
@@ -104,6 +104,22 @@ Default value: `$user_mapping`
 Data type: `Optional[String[1]]`
 
 Kind of the application to deploy
+
+Default value: ``undef``
+
+##### <a name="retention_min"></a>`retention_min`
+
+Data type: `Integer[1]`
+
+Minimum number of deployments to keep on disk when pruning
+
+Default value: `5`
+
+##### <a name="retention_max"></a>`retention_max`
+
+Data type: `Optional[Integer[1]]`
+
+Maximum number of deployments to keep on disk after deploying a new deployment (enable auto-pruning)
 
 Default value: ``undef``
 
