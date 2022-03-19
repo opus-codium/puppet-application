@@ -22,4 +22,4 @@ ENV USER=deploy
 
 USER deploy
 
-ENTRYPOINT ["/opt/puppetlabs/bin/mco"]
+ENTRYPOINT []
