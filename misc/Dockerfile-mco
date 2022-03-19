@@ -19,7 +19,8 @@ COPY client.conf /etc/choria/client.conf
 COPY --chown=deploy:deploy ssl /home/deploy/.puppetlabs/etc/puppet/ssl
 
 ENV USER=deploy
+ENV PATH=/opt/puppetlabs/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
 
 USER deploy
 
-ENTRYPOINT ["/opt/puppetlabs/bin/mco"]
+ENTRYPOINT []

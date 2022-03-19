@@ -55,6 +55,5 @@ deloy:
     - build artifact
   image:
     name: registry.example.com/image-builder/mco
-    entrypoint: [""]
-  script: /opt/puppetlabs/bin/mco tasks run application::deploy --application=foo --environment=production --url="${URL}" --deployment_name="${CI_COMMIT_SHA}" -C profile::foo
+  script: mco tasks run application::deploy --application=foo --environment=production --url="${URL}" --deployment_name="${CI_COMMIT_SHA}" -C profile::foo
 ```
