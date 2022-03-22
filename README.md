@@ -133,4 +133,9 @@ application::kind { 'rails':
     touch tmp/restart.txt
     | SH
 }
+
+application { 'website':
+  # ...
+  kind => 'rails',
+}
 ```
