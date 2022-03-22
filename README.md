@@ -9,6 +9,7 @@
 	* [Declaring an application](#declaring-an-application)
 	* [mtree integration](#mtree-integration)
 	* [Hooks](#hooks)
+	* [Continuous Deployment (CD)](#continuous-deployment-cd)
 
 <!-- vim-markdown-toc -->
 
@@ -139,3 +140,7 @@ application { 'website':
   kind => 'rails',
 }
 ```
+
+### Continuous Deployment (CD)
+
+The goal of this module is to allow building custom CD using GitLab and Choria.  The [misc](https://github.com/opus-codium/puppet-application/tree/main/misc) directory features templates to help setup such type of infrastructures.
