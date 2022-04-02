@@ -4,14 +4,6 @@ require 'minitar'
 require 'puppet'
 require 'tempfile'
 
-module TrustedSSLProvider
-  def create_x509_store(roots, crls, revocation)
-    store = super
-    store.set_default_paths
-    store
-  end
-end
-
 class Artifact
   attr_reader :deployment_name
 
@@ -30,15 +22,7 @@ class Artifact
     initialize_puppet
     client = Puppet.runtime[:http]
     ssl_provider = Puppet::SSL::SSLProvider.new
-    # FIXME: Drop the TrustedSSLProvider module above when Puppet allow mixing
-    # system CA and Puppet client certificate authentication
-    #
-    # PR: https://github.com/puppetlabs/puppet/pull/8887
-    #
-    # This would result on using this:
-    #   client.get(URI(url), options: { ssl_context: ssl_provider.load_context(revocation: false, include_system_store: true) }) do |response|
-    ssl_provider.extend TrustedSSLProvider
-    client.get(URI(url), options: { ssl_context: ssl_provider.load_context(revocation: false) }) do |response|
+    client.get(URI(url), options: { ssl_context: ssl_provider.load_context(revocation: false, include_system_store: true) }) do |response|
       raise 'Failed to download artifact' unless response.success?
 
       File.open(@tmp_file.path, 'w') do |f|
