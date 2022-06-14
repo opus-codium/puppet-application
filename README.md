@@ -143,4 +143,27 @@ application { 'website':
 
 ### Continuous Deployment (CD)
 
-The goal of this module is to allow building custom CD using GitLab and Choria.  The [misc](https://github.com/opus-codium/puppet-application/tree/main/misc) directory features templates to help setup such type of infrastructures.
+The goal of this module is to allow building custom CD using GitLab and Choria.  The [misc](https://github.com/opus-codium/puppet-application/tree/main/misc) directory features templates to help setup a CD container.  This allows you to rely on [GitLab Generic Packages Repository](https://docs.gitlab.com/ee/user/packages/generic_packages/) to push the packages you buisd and deploy them using short lived CI/CD job tokens.  The following example build and deploy a new version of an application each time a new tag is pushed:
+
+```yaml
+variables:
+  URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/${CI_COMMIT_TAG}/artifact.tar.gz"
+
+package:
+  stage: package
+  only:
+    - tags
+  script:
+    - tar zcf /tmp/artifact.tar.gz --exclude .git .
+    - curl --fail --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file /tmp/artifact.tar.gz "${URL}"'
+
+deploy:
+  stage: deploy
+  only:
+    - tags
+  needs:
+    - package
+  image:
+    name: registry.example.com/image-builder/mco
+  script: 'mco tasks run application::deploy --application=${CI_PROJECT_NAME} --environment=production --url="${URL}" --deployment_name="${CI_COMMIT_TAG}" --header="{\"JOB-TOKEN\": \"${CI_JOB_TOKEN}\"}" -C profile::${CI_PROJECT_NAME}'
+```

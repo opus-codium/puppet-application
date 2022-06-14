@@ -23,7 +23,7 @@ Given('the following deployments:') do |table|
 end
 
 When('I create a deployment {string}') do |name|
-  @application.deploy(nil, name)
+  @application.deploy(nil, name, {})
   workaround_async_ci
 end
 

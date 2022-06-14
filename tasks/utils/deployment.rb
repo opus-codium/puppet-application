@@ -24,14 +24,14 @@ class Deployment
     @path = File.join(application.path, name)
   end
 
-  def self.create(application, name, url)
+  def self.create(application, name, url, headers)
     deployment = Deployment.new(application, name)
-    deployment.deploy(url)
+    deployment.deploy(url, headers)
     deployment
   end
 
-  def deploy(url)
-    artifact = Artifact.new(url)
+  def deploy(url, headers)
+    artifact = Artifact.new(url, headers)
     @name ||= artifact.deployment_name
 
     raise 'Cannot infer deployment name and none specified' if name.nil?
