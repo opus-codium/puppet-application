@@ -7,22 +7,22 @@ require 'tempfile'
 class Artifact
   attr_reader :deployment_name
 
-  def initialize(url = nil)
+  def initialize(url = nil, headers = {})
     @tmp_file = Tempfile.open('archive')
     @tmp_file.close
     FileUtils.chmod(0o600, @tmp_file.path)
 
     return unless url
 
-    download(url)
+    download(url, headers)
     @deployment_name = read_deployment_name
   end
 
-  def download(url)
+  def download(url, headers)
     initialize_puppet
     client = Puppet.runtime[:http]
     ssl_provider = Puppet::SSL::SSLProvider.new
-    client.get(URI(url), options: { ssl_context: ssl_provider.load_context(revocation: false, include_system_store: true) }) do |response|
+    client.get(URI(url), headers: headers, options: { ssl_context: ssl_provider.load_context(revocation: false, include_system_store: true) }) do |response|
       raise 'Failed to download artifact' unless response.success?
 
       File.open(@tmp_file.path, 'w') do |f|

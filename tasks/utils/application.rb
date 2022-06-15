@@ -22,8 +22,8 @@ class Application
     @retention_max = retention_max
   end
 
-  def deploy(url, deployment_name)
-    deployment = Deployment.create(self, deployment_name, url)
+  def deploy(url, deployment_name, headers)
+    deployment = Deployment.create(self, deployment_name, url, headers)
 
     deployment.activate
 

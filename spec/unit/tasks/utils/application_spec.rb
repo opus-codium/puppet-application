@@ -8,8 +8,8 @@ RSpec.describe Application do
   let(:path) { Dir.mktmpdir }
 
   before do
-    application.deploy(nil, '1')
-    application.deploy(nil, '2')
+    application.deploy(nil, '1', {})
+    application.deploy(nil, '2', {})
   end
 
   after do
