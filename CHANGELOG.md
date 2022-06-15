@@ -5,9 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0](https://github.com/opus-codium/puppet-application/tree/1.1.0) (2022-06-06)
+## [1.2.0](https://github.com/opus-codium/puppet-application/tree/1.2.0) (2022-06-15)
 
-[Full Changelog](https://github.com/opus-codium/puppet-application/compare/v1.0.1...1.1.0)
+[Full Changelog](https://github.com/opus-codium/puppet-application/compare/v1.1.0...1.2.0)
+
+**Implemented enhancements:**
+
+- Allow passing custom headers to fetch artifacts [\#27](https://github.com/opus-codium/puppet-application/pull/27) ([smortex](https://github.com/smortex))
+
+## [v1.1.0](https://github.com/opus-codium/puppet-application/tree/v1.1.0) (2022-06-06)
+
+[Full Changelog](https://github.com/opus-codium/puppet-application/compare/v1.0.1...v1.1.0)
 
 **Implemented enhancements:**
 
