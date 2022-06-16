@@ -286,6 +286,12 @@ Data type: `Optional[String[1]]`
 
 The name of the deployment to create
 
+##### `headers`
+
+Data type: `Optional[Hash[String[1], String[1]]]`
+
+Extra HTTP headers
+
 ### <a name="list"></a>`list`
 
 List applications and deployments
