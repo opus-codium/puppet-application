@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'minitar'
 require 'puppet'
 require 'tempfile'
 
@@ -60,6 +59,7 @@ class Artifact
   def read_deployment_name
     res = nil
 
+    require 'minitar'
     Zlib::GzipReader.open(@tmp_file.path) do |io|
       Minitar.open(io) do |tar|
         tar.each_entry do |entry|
