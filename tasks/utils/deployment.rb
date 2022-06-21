@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'fileutils'
-require 'mtree'
 
 require_relative 'applications_helper'
 require_relative 'artifact'
@@ -162,6 +161,7 @@ class Deployment
 
     return nil unless File.exist?(mtree_file)
 
+    require 'mtree'
     parser = Mtree::Parser.new
     parser.parse_file(mtree_file)
     parser.specifications
