@@ -38,6 +38,8 @@ class ApplicationFactory
 
   def self.load_configuration_metadata
     YAML.safe_load(File.read(ApplicationsHelper.instance.configuration_metadata))
+  rescue Errno::ENOENT
+    {}
   end
 
   private_class_method :configuration_metadata_for, :load_configuration_metadata

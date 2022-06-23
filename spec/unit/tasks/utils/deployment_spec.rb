@@ -2,6 +2,8 @@
 
 require 'spec_helper'
 
+require 'mtree'
+
 require_relative '../../../../tasks/utils/application'
 require_relative '../../../../tasks/utils/deployment'
 
