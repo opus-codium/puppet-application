@@ -12,9 +12,13 @@ class ApplicationFactory
   end
 
   def self.find(application, environment)
-    configuration_metadata_for(application, environment).map do |spec|
+    res = configuration_metadata_for(application, environment).map do |spec|
       Application.new(spec)
     end
+
+    raise "No match for application #{application} in environment #{environment}" if res.empty?
+
+    res
   end
 
   def self.configuration_metadata_for(application, environment)
