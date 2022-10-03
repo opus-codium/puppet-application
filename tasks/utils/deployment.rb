@@ -151,8 +151,18 @@ class Deployment
 
     FileUtils.mkdir_p(path)
 
+    # When the application is deployed by an unprivilegied deployment user, we
+    # want them to have r/w access to the deployment directory in the
+    # before_deploy hook.
+    FileUtils.chown(application.deploy_user, application.deploy_group, path)
+
     yield
 
+    # After extraction by root, files might belong to random users.  We want
+    # them to belong to the deployment user.
+    #
+    # FIXME: Extract files as the deployment user with --no-same-owner and
+    # --same-permissions to avoid this step.
     FileUtils.chown_R(application.deploy_user, application.deploy_group, path)
   end
 
