@@ -7,7 +7,8 @@ class Artifact
   attr_reader :deployment_name
 
   def initialize(url = nil, headers = {})
-    @tmp_file = Tempfile.open('archive')
+    basename = url&.split('/')&.last
+    @tmp_file = Tempfile.open(['archive', basename])
     @tmp_file.close
     FileUtils.chmod(0o600, @tmp_file.path)
 
@@ -35,7 +36,7 @@ class Artifact
   def extract_to(path)
     return if File.empty?(@tmp_file.path)
 
-    Puppet::Util::Execution.execute %(tar zxf #{@tmp_file.path} #{tar_strip_components} -C #{path}),
+    Puppet::Util::Execution.execute ['tar', 'axf', @tmp_file.path, tar_strip_components, '-C', path].compact,
                                     failonfail: true,
                                     combine: true
   end
@@ -57,31 +58,18 @@ class Artifact
   end
 
   def read_deployment_name
-    res = nil
+    output = Puppet::Util::Execution.execute(['tar', 'atf', @tmp_file.path], failonfail: true)
 
-    require 'minitar'
-    Zlib::GzipReader.open(@tmp_file.path) do |io|
-      Minitar.open(io) do |tar|
-        tar.each_entry do |entry|
-          next unless entry.file?
-          if res.nil?
-            res, rest = entry.full_name.split('/', 2)
-            unless rest
-              res = nil
-              break
-            end
-          else
-            unless entry.full_name.start_with?(res + '/')
-              res = nil
-              break
-            end
-          end
-        end
-      end
-    end
-
-    res
+    common_root(output.lines.map(&:chomp))
   end
+
+  def common_root(filenames)
+    roots = filenames.select { |item| item[-1] == '/' }.map { |item| item.split('/', 2).first }.uniq
+
+    roots.first if roots.size == 1
+  end
+
+  public :common_root
 
   def tar_strip_components
     '--strip-components=1' if deployment_name
