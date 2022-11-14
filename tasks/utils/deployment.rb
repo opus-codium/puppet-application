@@ -49,7 +49,7 @@ class Deployment
         raise e
       end
     end
-    run_hook('after_deploy')
+    raise 'after_deploy hook failed' unless run_hook('after_deploy')
   end
 
   def active?

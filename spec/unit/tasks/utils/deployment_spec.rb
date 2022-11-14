@@ -126,7 +126,7 @@ RSpec.describe Deployment do
       allow(deployment).to receive(:hook_path).with('before_deploy').and_return(fixture('success_hook'))
       allow(deployment).to receive(:hook_path).with('after_deploy').and_return(fixture('success_hook'))
 
-      expect(deployment.deploy(url, {})).to be_truthy
+      expect { deployment.deploy(url, {}) }.not_to raise_exception
       expect(deployment).to have_received(:run_hook).with('before_deploy')
       expect(deployment).to have_received(:run_hook).with('after_deploy')
     end
@@ -144,7 +144,7 @@ RSpec.describe Deployment do
       allow(deployment).to receive(:hook_path).with('before_deploy').and_return(fixture('success_hook'))
       allow(deployment).to receive(:hook_path).with('after_deploy').and_return(fixture('failure_hook'))
 
-      expect(deployment.deploy(url, {})).to be_falsey
+      expect { deployment.deploy(url, {}) }.to raise_exception('after_deploy hook failed')
       expect(deployment).to have_received(:run_hook).with('before_deploy')
       expect(deployment).to have_received(:run_hook).with('after_deploy')
     end
