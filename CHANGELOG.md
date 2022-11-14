@@ -5,9 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0](https://github.com/opus-codium/puppet-application/tree/2.0.0) (2022-10-19)
+## [3.0.0](https://github.com/opus-codium/puppet-application/tree/3.0.0) (2022-11-14)
 
-[Full Changelog](https://github.com/opus-codium/puppet-application/compare/v1.2.0...2.0.0)
+[Full Changelog](https://github.com/opus-codium/puppet-application/compare/v2.0.0...3.0.0)
+
+**Breaking changes:**
+
+- Raise an exception when an after\_deploy/after\_activate hook fail [\#34](https://github.com/opus-codium/puppet-application/pull/34) ([smortex](https://github.com/smortex))
+
+## [v2.0.0](https://github.com/opus-codium/puppet-application/tree/v2.0.0) (2022-10-20)
+
+[Full Changelog](https://github.com/opus-codium/puppet-application/compare/v1.2.0...v2.0.0)
 
 **Breaking changes:**
 
