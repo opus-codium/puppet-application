@@ -80,7 +80,7 @@ class Deployment
     FileUtils.rm_f(application.current_link_path)
     FileUtils.ln_s(path, application.current_link_path)
     FileUtils.touch(path)
-    run_hook('after_activate')
+    raise 'after_activate hook failed' unless run_hook('after_activate')
   end
 
   def updated_at
