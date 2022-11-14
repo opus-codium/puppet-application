@@ -49,7 +49,7 @@ class Deployment
         raise e
       end
     end
-    run_hook('after_deploy')
+    raise 'after_deploy hook failed' unless run_hook('after_deploy')
   end
 
   def active?
@@ -80,7 +80,7 @@ class Deployment
     FileUtils.rm_f(application.current_link_path)
     FileUtils.ln_s(path, application.current_link_path)
     FileUtils.touch(path)
-    run_hook('after_activate')
+    raise 'after_activate hook failed' unless run_hook('after_activate')
   end
 
   def updated_at

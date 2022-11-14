@@ -24,7 +24,7 @@ jobs:
     env:
       BUNDLE_WITHOUT: development:test:release
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -48,7 +48,7 @@ jobs:
       PUPPET_VERSION: "~> ${{ matrix.puppet }}.0"
     name: Puppet ${{ matrix.puppet }} (Ruby ${{ matrix.ruby }})
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -73,7 +73,7 @@ jobs:
         run: |
           echo '{"ipv6":true,"fixed-cidr-v6":"2001:db8:1::/64"}' | sudo tee /etc/docker/daemon.json
           sudo service docker restart
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
