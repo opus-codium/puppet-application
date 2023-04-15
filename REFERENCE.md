@@ -6,9 +6,6 @@
 
 ### Classes
 
-#### Public Classes
-
-
 #### Private Classes
 
 * `application::common`: Boring implementation details
@@ -16,7 +13,7 @@
 ### Defined types
 
 * [`application`](#application): Declare an application to orchestrate deployments
-* [`application::kind`](#applicationkind): Declare a set of hooks for application deployment
+* [`application::kind`](#application--kind): Declare a set of hooks for application deployment
 
 ### Tasks
 
@@ -25,8 +22,6 @@
 * [`list`](#list): List applications and deployments
 * [`prune`](#prune): Prune old deployments of an application
 * [`remove`](#remove): Remove a deployment from an application
-
-## Classes
 
 ## Defined types
 
@@ -38,52 +33,52 @@ Declare an application to orchestrate deployments
 
 The following parameters are available in the `application` defined type:
 
-* [`application`](#application)
-* [`environment`](#environment)
-* [`path`](#path)
-* [`deploy_user`](#deploy_user)
-* [`deploy_group`](#deploy_group)
-* [`user_mapping`](#user_mapping)
-* [`group_mapping`](#group_mapping)
-* [`kind`](#kind)
-* [`retention_min`](#retention_min)
-* [`retention_max`](#retention_max)
+* [`application`](#-application--application)
+* [`environment`](#-application--environment)
+* [`path`](#-application--path)
+* [`deploy_user`](#-application--deploy_user)
+* [`deploy_group`](#-application--deploy_group)
+* [`user_mapping`](#-application--user_mapping)
+* [`group_mapping`](#-application--group_mapping)
+* [`kind`](#-application--kind)
+* [`retention_min`](#-application--retention_min)
+* [`retention_max`](#-application--retention_max)
 
-##### <a name="application"></a>`application`
+##### <a name="-application--application"></a>`application`
 
 Data type: `String[1]`
 
 Name of the application to deploy
 
-##### <a name="environment"></a>`environment`
+##### <a name="-application--environment"></a>`environment`
 
 Data type: `String[1]`
 
 Environment of the application to deploy
 
-##### <a name="path"></a>`path`
+##### <a name="-application--path"></a>`path`
 
 Data type: `Stdlib::Absolutepath`
 
 Path of the application
 
-##### <a name="deploy_user"></a>`deploy_user`
+##### <a name="-application--deploy_user"></a>`deploy_user`
 
 Data type: `Optional[String[1]]`
 
 User used to deploy the application
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="deploy_group"></a>`deploy_group`
+##### <a name="-application--deploy_group"></a>`deploy_group`
 
 Data type: `Optional[String[1]]`
 
 Group used to deploy the application
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="user_mapping"></a>`user_mapping`
+##### <a name="-application--user_mapping"></a>`user_mapping`
 
 Data type: `Hash[String[1], String[1]]`
 
@@ -91,7 +86,7 @@ User mapping for managing deployment file permissions
 
 Default value: `{}`
 
-##### <a name="group_mapping"></a>`group_mapping`
+##### <a name="-application--group_mapping"></a>`group_mapping`
 
 Data type: `Hash[String[1], String[1]]`
 
@@ -99,15 +94,15 @@ Group mapping for managing deployment file permissions
 
 Default value: `$user_mapping`
 
-##### <a name="kind"></a>`kind`
+##### <a name="-application--kind"></a>`kind`
 
 Data type: `Optional[String[1]]`
 
 Kind of the application to deploy
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="retention_min"></a>`retention_min`
+##### <a name="-application--retention_min"></a>`retention_min`
 
 Data type: `Integer[1]`
 
@@ -115,15 +110,15 @@ Minimum number of deployments to keep on disk when pruning
 
 Default value: `5`
 
-##### <a name="retention_max"></a>`retention_max`
+##### <a name="-application--retention_max"></a>`retention_max`
 
 Data type: `Optional[Integer[1]]`
 
 Maximum number of deployments to keep on disk after deploying a new deployment (enable auto-pruning)
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="applicationkind"></a>`application::kind`
+### <a name="application--kind"></a>`application::kind`
 
 Hooks are run from the deployment directory as the user configured by `deploy_user` in the application.
 
@@ -153,78 +148,78 @@ Each hook can be set using the corresponding `*_content` or `*_source` parameter
 
 The following parameters are available in the `application::kind` defined type:
 
-* [`before_deploy_content`](#before_deploy_content)
-* [`before_deploy_source`](#before_deploy_source)
-* [`after_deploy_content`](#after_deploy_content)
-* [`after_deploy_source`](#after_deploy_source)
-* [`before_activate_content`](#before_activate_content)
-* [`before_activate_source`](#before_activate_source)
-* [`after_activate_content`](#after_activate_content)
-* [`after_activate_source`](#after_activate_source)
+* [`before_deploy_content`](#-application--kind--before_deploy_content)
+* [`before_deploy_source`](#-application--kind--before_deploy_source)
+* [`after_deploy_content`](#-application--kind--after_deploy_content)
+* [`after_deploy_source`](#-application--kind--after_deploy_source)
+* [`before_activate_content`](#-application--kind--before_activate_content)
+* [`before_activate_source`](#-application--kind--before_activate_source)
+* [`after_activate_content`](#-application--kind--after_activate_content)
+* [`after_activate_source`](#-application--kind--after_activate_source)
 
-##### <a name="before_deploy_content"></a>`before_deploy_content`
-
-Data type: `Optional[String[1]]`
-
-
-
-Default value: ``undef``
-
-##### <a name="before_deploy_source"></a>`before_deploy_source`
+##### <a name="-application--kind--before_deploy_content"></a>`before_deploy_content`
 
 Data type: `Optional[String[1]]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="after_deploy_content"></a>`after_deploy_content`
-
-Data type: `Optional[String[1]]`
-
-
-
-Default value: ``undef``
-
-##### <a name="after_deploy_source"></a>`after_deploy_source`
+##### <a name="-application--kind--before_deploy_source"></a>`before_deploy_source`
 
 Data type: `Optional[String[1]]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="before_activate_content"></a>`before_activate_content`
-
-Data type: `Optional[String[1]]`
-
-
-
-Default value: ``undef``
-
-##### <a name="before_activate_source"></a>`before_activate_source`
+##### <a name="-application--kind--after_deploy_content"></a>`after_deploy_content`
 
 Data type: `Optional[String[1]]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="after_activate_content"></a>`after_activate_content`
-
-Data type: `Optional[String[1]]`
-
-
-
-Default value: ``undef``
-
-##### <a name="after_activate_source"></a>`after_activate_source`
+##### <a name="-application--kind--after_deploy_source"></a>`after_deploy_source`
 
 Data type: `Optional[String[1]]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
+
+##### <a name="-application--kind--before_activate_content"></a>`before_activate_content`
+
+Data type: `Optional[String[1]]`
+
+
+
+Default value: `undef`
+
+##### <a name="-application--kind--before_activate_source"></a>`before_activate_source`
+
+Data type: `Optional[String[1]]`
+
+
+
+Default value: `undef`
+
+##### <a name="-application--kind--after_activate_content"></a>`after_activate_content`
+
+Data type: `Optional[String[1]]`
+
+
+
+Default value: `undef`
+
+##### <a name="-application--kind--after_activate_source"></a>`after_activate_source`
+
+Data type: `Optional[String[1]]`
+
+
+
+Default value: `undef`
 
 ## Tasks
 
