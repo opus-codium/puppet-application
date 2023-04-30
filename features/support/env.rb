@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def workaround_async_ci
   # Linux seems to be able to group the creation of multiple files in a single
   # transaction that cause all of them to have the same ctime / mtime.

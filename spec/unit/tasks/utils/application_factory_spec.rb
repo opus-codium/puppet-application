@@ -39,6 +39,7 @@ RSpec.describe ApplicationFactory do
       it { is_expected.to be_an(Array) }
       it { is_expected.to have_attributes(size: 2) }
     end
+
     context 'no application is configured' do
       before do
         allow(described_class).to receive(:load_configuration_metadata).and_return([])

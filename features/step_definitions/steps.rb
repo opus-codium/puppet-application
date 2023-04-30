@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../tasks/utils/application'
 
 Given('an application {string}') do |application|
@@ -37,11 +39,9 @@ When('I remove the deployment {string}') do |name|
 end
 
 When('I remove the deployment {string} catching errors') do |name|
-  begin
-    step(%(I remove the deployment "#{name}"))
-  rescue StandardError => e
-    @last_error = e.message
-  end
+  step(%(I remove the deployment "#{name}"))
+rescue StandardError => e
+  @last_error = e.message
 end
 
 When('I prune old deployments keeping the last {int}') do |keep|

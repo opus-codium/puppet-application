@@ -17,7 +17,7 @@ class ApplicationListTask < TaskHelper
             active: deployment.active?,
           }
         }
-      end.inject(:merge)
+      end.reduce(:merge)
 
       res << {
         application: app.name,
