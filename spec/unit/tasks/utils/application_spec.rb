@@ -16,7 +16,7 @@ RSpec.describe Application do
     FileUtils.rm_r(path)
   end
 
-  context '#deployments' do
+  describe '#deployments' do
     subject { application.deployments.count }
 
     it { is_expected.to eq(2) }

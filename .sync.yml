@@ -1,7 +1,12 @@
 Gemfile:
-  puppet_version: '~> 7.0'
   optional:
     ':test':
       - gem: cucumber
       - gem: minitar
       - gem: mtree
+.rubocop.yml:
+  extra:
+    RSpec/MultipleMemoizedHelpers:
+      Enabled: false
+    RSpec/SubjectStub:
+      Enabled: false

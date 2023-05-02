@@ -74,7 +74,7 @@ RSpec.describe Deployment do
     end
   end
 
-  context '#persistent_data_specifications' do
+  describe '#persistent_data_specifications' do
     subject { deployment.persistent_data_specifications }
 
     let(:user_mapping) do
@@ -91,16 +91,17 @@ RSpec.describe Deployment do
     before do
       parser = Mtree::Parser.new
       parser.parse(<<~MTREE)
-      /set type=dir uname=root gname=wheel mode=0755
-      . nochange
-          tmp uname=john gname=john mode=0700
-          ..
-      ..
+        /set type=dir uname=root gname=wheel mode=0755
+        . nochange
+            tmp uname=john gname=john mode=0700
+            ..
+        ..
       MTREE
       allow(deployment).to receive(:persistent_data_specifications_load).and_return(parser.specifications)
     end
 
     it { is_expected.to have_attributes(uname: 'root', gname: 'root') }
+
     it 'is expected to have its first children to have attributes {:gname => "john", :uname => "jane"}' do
       expect(subject.children.first).to have_attributes(uname: 'jane', gname: 'john')
     end

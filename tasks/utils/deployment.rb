@@ -36,18 +36,16 @@ class Deployment
     raise 'Cannot infer deployment name and none specified' if name.nil?
 
     creating_deployment_directory do
-      begin
-        raise 'Aborted deployment: before_deploy hook failed' unless run_hook('before_deploy')
+      raise 'Aborted deployment: before_deploy hook failed' unless run_hook('before_deploy')
 
-        artifact.extract_to(path)
-        artifact.unlink
+      artifact.extract_to(path)
+      artifact.unlink
 
-        application.setup_persistent_data(self)
-        application.link_persistent_data(self)
-      rescue => e
-        remove
-        raise e
-      end
+      application.setup_persistent_data(self)
+      application.link_persistent_data(self)
+    rescue StandardError => e
+      remove
+      raise e
     end
     raise 'after_deploy hook failed' unless run_hook('after_deploy')
   end
@@ -112,7 +110,7 @@ class Deployment
       Process.gid = application.deploy_group if application.deploy_group
       Process.uid = application.deploy_user  if application.deploy_user
 
-      ENV.delete_if { |variable| variable !~ /^LC_/ }
+      ENV.delete_if { |variable| variable !~ %r{^LC_} }
 
       ENV['APPLICATION_NAME'] = application.name
       ENV['APPLICATION_PATH'] = application.path

@@ -32,9 +32,7 @@ class ApplicationFactory
     end
 
     res.map do |spec|
-      spec.keys.each do |k|
-        spec[k.to_sym] = spec.delete(k)
-      end
+      spec.transform_keys!(&:to_sym)
       spec[:name] = spec.delete(:application)
       spec
     end
