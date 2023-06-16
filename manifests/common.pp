@@ -25,5 +25,5 @@ class application::common (
     mode   => '0644',
   }
 
-  ensure_packages(['mtree'], { ensure => installed, provider => $gem_dependencies_provider })
+  stdlib::ensure_packages(['mtree'], { ensure => installed, provider => $gem_dependencies_provider })
 }
