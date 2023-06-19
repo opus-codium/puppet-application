@@ -40,7 +40,7 @@ define application (
         retention_min => $retention_min,
         retention_max => $retention_max,
       },
-    ].to_yaml.regsubst("\\A---\n", ''),
+    ].stdlib::to_yaml.regsubst("\\A---\n", ''),
   }
 
   file { $path:
