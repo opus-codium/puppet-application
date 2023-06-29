@@ -4,6 +4,9 @@ Gemfile:
       - gem: cucumber
       - gem: minitar
       - gem: mtree
+.github/CODEOWNERS:
+  extra_owners:
+    - vittoria-conseil
 .rubocop.yml:
   extra:
     RSpec/MultipleMemoizedHelpers:
