@@ -1,13 +1,25 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+Each new release typically also includes the latest modulesync defaults.
+These should not affect the functionality of the module.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [v4.0.0](https://github.com/opus-codium/puppet-application/tree/v4.0.0) (2023-07-05)
 
-## [3.0.0](https://github.com/opus-codium/puppet-application/tree/3.0.0) (2022-11-14)
+[Full Changelog](https://github.com/opus-codium/puppet-application/compare/v3.0.0...v4.0.0)
 
-[Full Changelog](https://github.com/opus-codium/puppet-application/compare/v2.0.0...3.0.0)
+**Breaking changes:**
+
+- Require puppetlabs/stdlib 9.x [\#39](https://github.com/opus-codium/puppet-application/pull/39) ([smortex](https://github.com/smortex))
+
+**Implemented enhancements:**
+
+- Add support for Puppet 8 [\#38](https://github.com/opus-codium/puppet-application/pull/38) ([smortex](https://github.com/smortex))
+- Relax dependencies version requirements [\#37](https://github.com/opus-codium/puppet-application/pull/37) ([smortex](https://github.com/smortex))
+
+## [v3.0.0](https://github.com/opus-codium/puppet-application/tree/v3.0.0) (2022-11-14)
+
+[Full Changelog](https://github.com/opus-codium/puppet-application/compare/v2.0.0...v3.0.0)
 
 **Breaking changes:**
 
@@ -54,6 +66,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Fixed bugs:**
 
 - Fix module metadata [\#22](https://github.com/opus-codium/puppet-application/pull/22) ([smortex](https://github.com/smortex))
+
+## [v1.0.0](https://github.com/opus-codium/puppet-application/tree/v1.0.0) (2022-03-17)
+
+[Full Changelog](https://github.com/opus-codium/puppet-application/compare/ba003831f3735496f08f3eed97e8c03cad8dff1e...v1.0.0)
+
+**Breaking changes:**
+
+- Adjust hooks environment variables [\#16](https://github.com/opus-codium/puppet-application/pull/16) ([smortex](https://github.com/smortex))
+
+**Implemented enhancements:**
+
+- Add a task to list applications and deployments [\#13](https://github.com/opus-codium/puppet-application/pull/13) ([smortex](https://github.com/smortex))
+
+**Merged pull requests:**
+
+- Release 1.0.0 [\#21](https://github.com/opus-codium/puppet-application/pull/21) ([smortex](https://github.com/smortex))
+- Allow configuring the number of deployments to keep [\#20](https://github.com/opus-codium/puppet-application/pull/20) ([smortex](https://github.com/smortex))
+- Add tooling to build CD docker images [\#19](https://github.com/opus-codium/puppet-application/pull/19) ([smortex](https://github.com/smortex))
+- Allow custom titles [\#18](https://github.com/opus-codium/puppet-application/pull/18) ([smortex](https://github.com/smortex))
+- Add some documentation [\#17](https://github.com/opus-codium/puppet-application/pull/17) ([smortex](https://github.com/smortex))
+- Rename Deployment\#full\_path to Deployment\#path [\#15](https://github.com/opus-codium/puppet-application/pull/15) ([smortex](https://github.com/smortex))
+- Make $path a parameter of application [\#14](https://github.com/opus-codium/puppet-application/pull/14) ([smortex](https://github.com/smortex))
+- Drop created\_at [\#12](https://github.com/opus-codium/puppet-application/pull/12) ([smortex](https://github.com/smortex))
+- Populate environment variables [\#11](https://github.com/opus-codium/puppet-application/pull/11) ([smortex](https://github.com/smortex))
+- Fix deployment owner [\#10](https://github.com/opus-codium/puppet-application/pull/10) ([smortex](https://github.com/smortex))
+- Add minitar as a gem dependency [\#9](https://github.com/opus-codium/puppet-application/pull/9) ([smortex](https://github.com/smortex))
+- Allow downloading using system CA and Puppet PKI [\#8](https://github.com/opus-codium/puppet-application/pull/8) ([smortex](https://github.com/smortex))
+- Implement mtree substitutions [\#7](https://github.com/opus-codium/puppet-application/pull/7) ([smortex](https://github.com/smortex))
+- Infer deployment name from artifact [\#6](https://github.com/opus-codium/puppet-application/pull/6) ([smortex](https://github.com/smortex))
+- Add a task to prune old deployments [\#5](https://github.com/opus-codium/puppet-application/pull/5) ([smortex](https://github.com/smortex))
+- Add support for non tar-bomb artifacts [\#4](https://github.com/opus-codium/puppet-application/pull/4) ([smortex](https://github.com/smortex))
+- Download artifact using Puppet http client [\#3](https://github.com/opus-codium/puppet-application/pull/3) ([smortex](https://github.com/smortex))
+- Run the configured hooks on deployment [\#2](https://github.com/opus-codium/puppet-application/pull/2) ([smortex](https://github.com/smortex))
+- Add a task to remove a specified deployment [\#1](https://github.com/opus-codium/puppet-application/pull/1) ([smortex](https://github.com/smortex))
 
 
 

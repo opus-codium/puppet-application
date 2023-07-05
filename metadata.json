@@ -1,6 +1,6 @@
 {
   "name": "opuscodium-application",
-  "version": "3.0.1-rc0",
+  "version": "4.0.0",
   "source": "https://github.com/opus-codium/puppet-application",
   "author": "Opus Codium",
   "license": "Apache-2.0",
