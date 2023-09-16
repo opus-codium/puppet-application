@@ -1,5 +1,14 @@
 # application
 
+<!-- header GFM -->
+[![Build Status](https://img.shields.io/github/actions/workflow/status/opus-codium/puppet-application/release.yml)](https://github.com/opus-codium/puppet-application/releases)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/opuscodium/application.svg)](https://forge.puppetlabs.com/opuscodium/application)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/opuscodium/application.svg)](https://forge.puppetlabs.com/opuscodium/application)
+[![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/opuscodium/application.svg)](https://forge.puppetlabs.com/opuscodium/application)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/opuscodium/application.svg)](https://forge.puppetlabs.com/opuscodium/application)
+[![License](https://img.shields.io/github/license/opus-codium/puppet-application.svg)](https://github.com/voxpupuli/opuscodium-application/blob/master/LICENSE.md)
+<!-- header -->
+
 #### Table of Contents
 
 <!-- vim-markdown-toc GFM -->
