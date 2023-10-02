@@ -43,7 +43,7 @@ class Application
       deployments << Deployment.new(self, deployment_name)
     end
 
-    deployments.sort_by(&:updated_at).map { |deployment| [deployment.name, deployment] }.to_h
+    deployments.sort_by(&:updated_at).to_h { |deployment| [deployment.name, deployment] }
   end
 
   def current_deployment
