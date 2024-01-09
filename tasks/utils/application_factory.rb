@@ -13,7 +13,7 @@ class ApplicationFactory
 
   def self.find(application, environment)
     res = configuration_metadata_for(application, environment).map do |spec|
-      Application.new(spec)
+      Application.new(**spec)
     end
 
     raise "No match for application #{application} in environment #{environment}" if res.empty?
