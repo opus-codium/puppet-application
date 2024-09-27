@@ -1,11 +1,11 @@
-FROM choria/choria
+FROM registry.choria.io/choria/choria:0.29.4
 
 USER root
 
 # Puppet is required for task input validation
 RUN yum -y install wget && \
-    wget 'https://yum.puppetlabs.com/puppet7-release-el-8.noarch.rpm' && \
-    rpm -i puppet7-release-el-8.noarch.rpm && \
+    wget 'https://yum.puppetlabs.com/puppet8-release-el-9.noarch.rpm' && \
+    rpm -i puppet8-release-el-9.noarch.rpm && \
     yum -y install puppet-agent
 
 RUN /opt/puppetlabs/puppet/bin/gem install --bindir /opt/puppetlabs/bin choria-mcorpc-support
