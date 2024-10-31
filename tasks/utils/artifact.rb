@@ -4,17 +4,26 @@ require 'puppet'
 require 'tempfile'
 
 class Artifact
-  attr_reader :deployment_name
+  attr_reader :deployment_name, :filename
 
   def initialize(url = nil, headers = {})
-    basename = url&.split('/')&.last
-    @tmp_file = Tempfile.open(['archive', basename])
-    @tmp_file.close
-    FileUtils.chmod(0o600, @tmp_file.path)
+    return if url.nil?
 
-    return unless url
+    case url
+    when %r{^file:///}
+      @tmp_file = nil
+      @filename = url.sub(%r{^file://}, '')
+    when %r{^https?://}
+      basename = url.split('/').last
+      @tmp_file = Tempfile.open(['archive', basename])
+      @tmp_file.close
+      FileUtils.chmod(0o600, @tmp_file.path)
 
-    download(url, headers)
+      @filename = @tmp_file.path
+
+      download(url, headers)
+    end
+
     @deployment_name = read_deployment_name
   end
 
@@ -25,7 +34,7 @@ class Artifact
     client.get(URI(url), headers: headers, options: { ssl_context: ssl_provider.load_context(revocation: false, include_system_store: true) }) do |response|
       raise 'Failed to download artifact' unless response.success?
 
-      File.open(@tmp_file.path, 'w') do |f|
+      File.open(filename, 'w') do |f|
         response.read_body do |data|
           f.write(data)
         end
@@ -34,14 +43,16 @@ class Artifact
   end
 
   def extract_to(path)
-    return if File.empty?(@tmp_file.path)
+    return if filename.nil?
 
-    Puppet::Util::Execution.execute ['tar', 'axf', @tmp_file.path, tar_strip_components, '-C', path].compact,
+    Puppet::Util::Execution.execute ['tar', 'axf', filename, tar_strip_components, '-C', path].compact,
                                     failonfail: true,
                                     combine: true
   end
 
   def unlink
+    return unless @tmp_file
+
     @tmp_file.unlink
   end
 
@@ -58,7 +69,7 @@ class Artifact
   end
 
   def read_deployment_name
-    output = Puppet::Util::Execution.execute(['tar', 'tf', @tmp_file.path], failonfail: true)
+    output = Puppet::Util::Execution.execute(['tar', 'tf', filename], failonfail: true)
 
     common_root(output.lines.map(&:chomp))
   end
