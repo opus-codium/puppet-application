@@ -8,7 +8,7 @@ require_relative 'artifact'
 class Deployment
   include Comparable
 
-  attr_reader :application, :name, :path
+  attr_reader :application, :name
 
   def <=>(other)
     res = application <=> other.application
@@ -20,13 +20,18 @@ class Deployment
   def initialize(application, name)
     @application = application
     @name = name
-    @path = File.join(application.path, name)
   end
 
   def self.create(application, name, url, headers)
     deployment = Deployment.new(application, name)
     deployment.deploy(url, headers)
     deployment
+  end
+
+  def path
+    raise 'Deployment has currently no name' if name.nil?
+
+    @path ||= File.join(application.path, name)
   end
 
   def deploy(url, headers)
