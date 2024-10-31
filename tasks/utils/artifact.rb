@@ -75,7 +75,7 @@ class Artifact
   end
 
   def common_root(filenames)
-    roots = filenames.select { |item| item[-1] == '/' }.map { |item| item.split('/', 2).first }.uniq
+    roots = filenames.map { |item| item.sub(%r{^\./}, '') }.select { |item| item[-1] == '/' }.map { |item| item.split('/', 2).first }.uniq
 
     roots.first if roots.size == 1
   end
