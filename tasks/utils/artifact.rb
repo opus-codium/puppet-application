@@ -58,7 +58,7 @@ class Artifact
   end
 
   def read_deployment_name
-    output = Puppet::Util::Execution.execute(['tar', 'atf', @tmp_file.path], failonfail: true)
+    output = Puppet::Util::Execution.execute(['tar', 'tf', @tmp_file.path], failonfail: true)
 
     common_root(output.lines.map(&:chomp))
   end
