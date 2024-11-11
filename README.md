@@ -152,7 +152,7 @@ application { 'website':
 
 ### Continuous Deployment (CD)
 
-The goal of this module is to allow building custom CD using GitLab and Choria.  The [misc](https://github.com/opus-codium/puppet-application/tree/main/misc) directory features templates to help setup a CD container.  This allows you to rely on [GitLab Generic Packages Repository](https://docs.gitlab.com/ee/user/packages/generic_packages/) to push the packages you buisd and deploy them using short lived CI/CD job tokens.  The following example build and deploy a new version of an application each time a new tag is pushed:
+The goal of this module is to allow building custom CD using GitLab and Choria.  The [misc](https://github.com/opus-codium/puppet-application/tree/main/misc) directory features templates to help setup a CD container.  This allows you to rely on [GitLab Generic Packages Repository](https://docs.gitlab.com/ee/user/packages/generic_packages/) to push the packages you build and deploy them using short lived CI/CD job tokens.  The following example build and deploy a new version of an application each time a new tag is pushed:
 
 ```yaml
 variables:
