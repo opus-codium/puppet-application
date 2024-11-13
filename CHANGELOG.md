@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.1.0](https://github.com/opus-codium/puppet-application/tree/v4.1.0) (2024-11-13)
+
+[Full Changelog](https://github.com/opus-codium/puppet-application/compare/v4.0.1...v4.1.0)
+
+**Implemented enhancements:**
+
+- Allow `file://` URI scheme [\#53](https://github.com/opus-codium/puppet-application/pull/53) ([smortex](https://github.com/smortex))
+- Add support for FreeBSD 14 [\#50](https://github.com/opus-codium/puppet-application/pull/50) ([smortex](https://github.com/smortex))
+- Add support for Debian 12 [\#49](https://github.com/opus-codium/puppet-application/pull/49) ([smortex](https://github.com/smortex))
+
+**Fixed bugs:**
+
+- Use an AIO-agnostic path to Ruby for tasks [\#57](https://github.com/opus-codium/puppet-application/pull/57) ([smortex](https://github.com/smortex))
+- Fix deployment path inference [\#56](https://github.com/opus-codium/puppet-application/pull/56) ([smortex](https://github.com/smortex))
+- Fix read\_deployment\_name on FreeBSD [\#52](https://github.com/opus-codium/puppet-application/pull/52) ([smortex](https://github.com/smortex))
+
+**Closed issues:**
+
+- Deploying without deployment name is currently broken [\#55](https://github.com/opus-codium/puppet-application/issues/55)
+- Allow deploying from a local file \(e.g. `file:///path/to/file` or `/path/to/file`\) [\#54](https://github.com/opus-codium/puppet-application/issues/54)
+
 ## [v4.0.1](https://github.com/opus-codium/puppet-application/tree/v4.0.1) (2024-01-09)
 
 [Full Changelog](https://github.com/opus-codium/puppet-application/compare/v4.0.0...v4.0.1)
